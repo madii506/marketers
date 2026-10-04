@@ -1,86 +1,106 @@
-// MARKETERS home: the roster turning in the hero, the roster rows, the pitch room (brief → promo → launch), on air, clients.
-// Every promo on this page is made here from a real coin picture; when there are none yet, the page says so.
+// MARKETERS home, built as a feed: full-screen screens that snap. For you → one screen per marketer → the pitch room
+// (a camera: picture, pitch, pick a marketer, record) → on air → clients → questions. Launch opens as a drawer.
+// Every promo here is made from a real coin picture; when there are none yet, the screen says so.
 (function () {
   'use strict';
   const C = window.Core, X = window.Cross, L = window.Live;
   const { $, $$, esc } = C;
   const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const CAST = [
-    { k: 'hype', name: 'Doug', role: 'the street hype', fmt: 'megaphone street promos', img: 1 },
-    { k: 'keynote', name: 'Pip', role: 'the keynote', fmt: 'stage keynotes', img: 2 },
-    { k: 'infomercial', name: 'Lola', role: 'the infomercial', fmt: 'late-night infomercials', img: 3 },
-    { k: 'strategy', name: 'Otto', role: 'the strategist', fmt: 'whiteboard plans', img: 4 },
-    { k: 'model', name: 'Bruno', role: 'the face', fmt: 'glamour photoshoots', img: 5 },
-    { k: 'hotline', name: 'Kiki', role: 'the hotline', fmt: 'call-center hype', img: 6 },
+    { k: 'hype', name: 'Doug', role: 'the street hype', what: 'Megaphone promos on a busy street, holding your coin up for the whole city.', img: 1 },
+    { k: 'keynote', name: 'Pip', role: 'the keynote', what: 'A stage, a spotlight, your coin on the giant screen behind it.', img: 2 },
+    { k: 'infomercial', name: 'Lola', role: 'the infomercial', what: 'Late-night TV energy. Your coin as the product nobody can live without.', img: 3 },
+    { k: 'strategy', name: 'Otto', role: 'the strategist', what: 'A whiteboard full of sticky notes with your coin pinned in the middle.', img: 4 },
+    { k: 'model', name: 'Bruno', role: 'the face', what: 'A glamour photoshoot next to a statue of your coin. Flashes everywhere.', img: 5 },
+    { k: 'hotline', name: 'Kiki', role: 'the hotline', what: 'A call center that only talks about your coin, all day.', img: 6 },
   ];
   const pic = c => '/assets/img/m' + c.img + '.jpg';
   const byKey = k => CAST.find(c => c.k === k) || CAST[0];
-  const st = { cast: 'hype', image: null, job: null, still: null, busy: false, born: null, open: null, board: null, sort: 'new', shown: 24, reel: {}, step: 1 };
+  const st = { cast: 'hype', image: null, job: null, still: null, vid: null, cap: '', busy: false, born: null, open: null, board: null, sort: 'new', reel: {} };
   const status = (el, t, bad) => { el.textContent = t || ''; el.classList.toggle('bad', !!bad); };
-  function heartBurst(box, n, cls) {
+  const feed = $('#feed');
+  function floatHearts(box, n) {
     if (calm || !box) return;
     for (let i = 0; i < n; i++) setTimeout(() => {
-      const h = document.createElement('i'); h.style.setProperty('--x', (Math.random() * 70 - 35) + 'px'); h.style.setProperty('--r', (Math.random() * 40 - 20) + 'deg');
-      h.style.background = ['var(--rd)', 'var(--rd)', '#fff', 'var(--cy)'][i % 4]; if (cls) h.className = cls;
-      box.appendChild(h); setTimeout(() => h.remove(), 2700);
-    }, i * 140);
+      const h = document.createElement('i'); h.style.setProperty('--x', (Math.random() * 80 - 50) + 'px'); h.style.setProperty('--r', (Math.random() * 40 - 20) + 'deg');
+      h.style.background = ['var(--rd)', 'var(--rd)', '#fff', 'var(--cy)'][i % 4]; box.appendChild(h); setTimeout(() => h.remove(), 2500);
+    }, i * 120);
   }
+  function burst(phone, x, y) { const b = document.createElement('i'); b.className = 'burst'; b.style.left = x + 'px'; b.style.top = y + 'px'; phone.appendChild(b); setTimeout(() => b.remove(), 800); }
 
-  // ---------- the hero: the roster as a turning coverflow, likes rising off the front card ----------
-  (function flow() {
-    const box = $('#flow');
-    box.innerHTML = CAST.map((c, i) => `<div class="fc" data-i="${i}"><i class="bar5"></i><img src="${pic(c)}" alt="${esc(c.name)}, ${esc(c.role)}"${i > 2 ? ' loading="lazy"' : ''}><div class="tag"><b>${esc(c.name)}</b><span>${esc(c.role)}</span></div></div>`).join('') + '<div class="hearts" id="hh"></div>';
-    const cards = $$('.fc', box); let at = 0, timer = null;
-    function lay() {
-      const w = innerWidth < 560 ? 150 : 230;
-      cards.forEach((c, i) => {
-        let d = i - at; const n = cards.length; if (d > n / 2) d -= n; if (d < -n / 2) d += n;
-        const a = Math.abs(d);
-        c.style.transform = `translateX(${d * w}px) translateZ(${-a * 160}px) rotateY(${-d * 18}deg)`;
-        c.style.zIndex = 10 - a; c.style.opacity = a > 2 ? 0 : 1; c.style.filter = a ? `brightness(${1 - a * .25})` : 'none';
-        const was = c.classList.contains('c0'); c.classList.toggle('c0', d === 0); if (d === 0 && !was) { const b = c.querySelector('.bar5'); if (b) { b.style.display = 'none'; void b.offsetWidth; b.style.display = ''; } }
-        const r = st.reel[CAST[i].k];
-        if (d === 0 && r && !c.querySelector('video')) { const v = document.createElement('video'); v.src = r; v.muted = true; v.loop = true; v.playsInline = true; v.autoplay = true; v.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover'; c.prepend(v); v.play().catch(() => {}); }
-      });
-      heartBurst($('#hh'), 5);
-    }
-    function next() { at = (at + 1) % cards.length; lay(); }
-    cards.forEach(c => c.addEventListener('click', () => { at = Number(c.dataset.i); lay(); pickCast(CAST[at].k); clearInterval(timer); timer = setInterval(next, 3200); }));
-    lay(); if (!calm) timer = setInterval(next, 3200);
-    addEventListener('resize', lay);
-    C.get('/api/film?reel=1').then(j => { if (j && j.ok) { (j.reel || []).forEach(r => { st.reel[r.cast] = r.url; }); lay(); } }).catch(() => {});
-  })();
+  // ---------- the roster screens ----------
+  $('#roster').outerHTML = CAST.map(c => `
+  <section class="slide" id="s-${c.k}" data-k="${c.k}">
+    <div class="phone">
+      <div class="media"><img class="kb" src="${pic(c)}" alt="${esc(c.name)}, ${esc(c.role)}" loading="lazy"></div>
+      <div class="shade"></div>
+      <div class="rail"><button class="av" type="button" data-hire="${c.k}" aria-label="Hire ${esc(c.name)}"><img src="${pic(c)}" alt=""></button><button class="like" type="button" aria-label="Like"><i></i></button><button class="cmt" type="button" data-go="s-faq" aria-label="Questions"><i></i></button><button class="shr" type="button" aria-label="Share"><i></i></button><span class="disc"><img src="${pic(c)}" alt=""></span></div>
+      <div class="cap"><b>@${c.name.toLowerCase()}.markets</b><p>${esc(c.role)}. ${esc(c.what)}</p><div class="snd"><span>♫ ${esc(c.name)} is pitching your coin · ${esc(c.name)} is pitching your coin · </span></div></div>
+      <div class="hearts"></div>
+    </div>
+    <div class="info"><h2>${esc(c.name)}</h2><p class="role">${esc(c.role)}</p><p>${esc(c.what)}</p><button class="btn" type="button" data-hire="${c.k}">hire ${esc(c.name)}</button></div>
+  </section>`).join('');
+  const slides = $$('.slide');
 
-  // ---------- the roster rows: hover shows the marketer, click hires them ----------
-  (function roster() {
-    const rows = $('#rows'), peek = $('#peek'), pim = peek.querySelector('img');
-    rows.innerHTML = CAST.map((c, i) => `<li class="row" data-k="${c.k}"><span class="no">0${i + 1}</span><span class="nm">${esc(c.name)}</span><span class="rl">${esc(c.role)}</span><span class="fm">${esc(c.fmt)}</span><img class="th" src="${pic(c)}" alt="" loading="lazy"><button type="button" class="btn sm line">hire</button></li>`).join('');
-    rows.addEventListener('click', e => { const r = e.target.closest('.row'); if (!r) return; pickCast(r.dataset.k); document.getElementById('room').scrollIntoView({ behavior: calm ? 'auto' : 'smooth' }); });
-    if (matchMedia('(hover: none)').matches) return;
-    let x = 0, y = 0, px = 0, py = 0, on = false;
-    rows.addEventListener('mousemove', e => { x = e.clientX; y = e.clientY; const r = e.target.closest('.row'); if (r) { const c = byKey(r.dataset.k); if (!pim.src.endsWith(pic(c))) pim.src = pic(c); if (!on) { on = true; px = x; py = y; peek.classList.add('on'); } } });
-    rows.addEventListener('mouseleave', () => { on = false; peek.classList.remove('on'); });
-    (function loop() { px += (x - px) * .18; py += (y - py) * .18; peek.style.left = (px + 150) + 'px'; peek.style.top = py + 'px'; requestAnimationFrame(loop); })();
+  // ---------- the intro: the wordmark letter by letter over a montage of the roster ----------
+  $('#mark').innerHTML = [...'MARKETERS'].map((ch, i) => `<span class="gl" data-t="${ch}" style="--i:${i}">${ch}</span>`).join('');
+  (function montage() {
+    const box = $('#introMedia'); let i = 0;
+    function show() { const c = CAST[i % CAST.length]; i++; const im = new Image(); im.src = pic(c); im.alt = ''; im.className = 'x-in' + (calm ? '' : ' kb'); box.appendChild(im); while (box.children.length > 2) box.firstChild.remove(); }
+    show(); if (!calm) setInterval(() => { if (!document.hidden) show(); }, 2800);
   })();
+  if (!calm) setInterval(() => { const m = $('#mark'); if (document.hidden || !m) return; m.classList.add('glitch'); setTimeout(() => m.classList.remove('glitch'), 340); }, 3200);
+
+  // ---------- moving through the feed: the active screen, the menu, the dots, the keys ----------
+  const dots = $('#dots'); dots.innerHTML = slides.map(s => `<button type="button" data-go="${s.id}" aria-label="${s.id}"></button>`).join('');
+  function go(id) { const el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: calm ? 'auto' : 'smooth' }); }
+  document.addEventListener('click', e => {
+    const g = e.target.closest('[data-go]'); if (g) { e.preventDefault(); go(g.dataset.go); return; }
+    const m = e.target.closest('.menu a, .logo'); if (m && m.getAttribute('href')) { e.preventDefault(); go(m.getAttribute('href').slice(1)); return; }
+    const h = e.target.closest('[data-hire]'); if (h) { pickCast(h.dataset.hire); go('s-pitch'); return; }
+    const lk = e.target.closest('.like'); if (lk) { lk.classList.toggle('on'); floatHearts(lk.closest('.phone').querySelector('.hearts'), lk.classList.contains('on') ? 8 : 0); return; }
+    const sh = e.target.closest('.shr'); if (sh) { const sl = sh.closest('.slide'); C.copy(location.origin + '/#' + (sl ? sl.id : '')); return; }
+  });
+  // double-tap a screen to like it
+  feed.addEventListener('dblclick', e => {
+    const ph = e.target.closest('.phone'); if (!ph || ph.classList.contains('list') || e.target.closest('input,button,label')) return;
+    const r = ph.getBoundingClientRect(); burst(ph, e.clientX - r.left, e.clientY - r.top);
+    const lk = ph.querySelector('.like'); if (lk && !lk.classList.contains('on')) lk.classList.add('on'); floatHearts(ph.querySelector('.hearts'), 6);
+  });
+  let current = slides[0];
+  const io = new IntersectionObserver(es => es.forEach(en => {
+    if (!en.isIntersecting) return;
+    const s = en.target; current = s;
+    slides.forEach(x => x.classList.toggle('on', x === s));
+    $$('#dots button').forEach(b => b.classList.toggle('on', b.dataset.go === s.id));
+    const k = s.dataset.k, sec = k ? 's-hype' : s.id;
+    $$('.menu a').forEach(a => a.classList.toggle('on', a.dataset.s === sec));
+    $$('video').forEach(v => { if (s.contains(v)) v.play().catch(() => {}); else v.pause(); });
+    if (k) { const media = s.querySelector('.media'); const r = st.reel[k]; if (r && !media.querySelector('video')) media.innerHTML = `<video src="${r}" muted playsinline autoplay loop></video>`; floatHearts(s.querySelector('.hearts'), 5); }
+    if (s.id === 's-intro') floatHearts(s.querySelector('.hearts'), 4);
+  }), { root: feed, threshold: .6 });
+  slides.forEach(s => io.observe(s));
+  document.addEventListener('keydown', e => {
+    if (e.target.closest && e.target.closest('input, textarea') || !$('#drawer').hidden) return;
+    const i = slides.indexOf(current);
+    if (['ArrowDown', 'PageDown'].includes(e.key) && i < slides.length - 1) { e.preventDefault(); go(slides[i + 1].id); }
+    if (['ArrowUp', 'PageUp'].includes(e.key) && i > 0) { e.preventDefault(); go(slides[i - 1].id); }
+  });
+  if (location.hash && document.getElementById(location.hash.slice(1))) setTimeout(() => go(location.hash.slice(1)), 200);
 
   // ---------- the pitch room ----------
-  const castBox = $('#cast'), line = $('#line'), nm = $('#nm'), tk = $('#tk'), xh = $('#xh');
-  const pitchBtn = $('#pitchBtn'), pitchStatus = $('#pitchStatus'), pvScr = $('#pvScr'), pvWho = $('#pvWho'), pvCap = $('#pvCap'), kit = $('#kit');
-  const goBtn = $('#goBtn'), goStatus = $('#goStatus'), goProg = $('#goProg'), goRes = $('#goRes');
-  castBox.innerHTML = CAST.map(c => `<button type="button" class="ca${c.k === st.cast ? ' on' : ''}" data-k="${c.k}" title="${esc(c.name + ', ' + c.role)}"><img src="${pic(c)}" alt="" loading="lazy"><b>${esc(c.name)}</b></button>`).join('');
-  function pickCast(k) {
-    st.cast = k; $$('.ca', castBox).forEach(b => b.classList.toggle('on', b.dataset.k === k)); $$('.row').forEach(r => r.classList.toggle('on', r.dataset.k === k));
-    const c = byKey(k); pvWho.textContent = '@' + c.name.toLowerCase() + '.markets';
-    if (!st.still && !st.image) pvScr.innerHTML = `<img src="${pic(c)}" alt="">`;
+  const tray = $('#tray'), drop = $('#drop'), picIn = $('#pic'), picNote = $('#picNote'), nm = $('#nm'), tk = $('#tk'), line = $('#line');
+  const pitchBtn = $('#pitchBtn'), pitchStatus = $('#pitchStatus'), camMedia = $('#camMedia'), recDot = $('#recDot'), camTitle = $('#camTitle');
+  tray.innerHTML = CAST.map(c => `<button type="button" data-k="${c.k}" title="${esc(c.name + ', ' + c.role)}" class="${c.k === st.cast ? 'on' : ''}"><img src="${pic(c)}" alt="${esc(c.name)}"></button>`).join('');
+  function pickCast(k) { st.cast = k; $$('#tray button').forEach(b => b.classList.toggle('on', b.dataset.k === k)); const c = byKey(k); camTitle.textContent = c.name + ' · ' + c.role; checkSteps(); }
+  tray.addEventListener('click', e => { const b = e.target.closest('button'); if (b) pickCast(b.dataset.k); });
+  function checkSteps() {
+    $('#h1').classList.toggle('ok', !!st.image);
+    $('#h2').classList.toggle('ok', !!(nm.value.trim() && tk.value.trim() && line.value.trim().length >= 8));
+    $('#h3').classList.toggle('ok', !!st.still);
+    $('#h4').classList.toggle('ok', !!st.born);
+    $('#dSym').textContent = tk.value.trim() ? '$' + tk.value.trim().replace(/^\$/, '') : 'your coin';
   }
-  castBox.addEventListener('click', e => { const b = e.target.closest('.ca'); if (b) pickCast(b.dataset.k); });
-  function stepTo(n) {
-    st.step = Math.max(st.step, n);
-    $$('#rail3 span').forEach(s => { const k = Number(s.dataset.s); s.classList.toggle('on', k === st.step); s.classList.toggle('done', k < st.step); });
-    $$('#rail3 i').forEach((i, k) => i.classList.toggle('done', k + 1 < st.step));
-  }
-  // the coin's picture, squared to 768 in the browser
-  const drop = $('#drop'), picIn = $('#pic'), picImg = $('#picImg'), picNote = $('#picNote');
   picIn.addEventListener('change', () => {
     const f = picIn.files && picIn.files[0]; if (!f) return;
     if (f.size > 12e6) { picNote.textContent = 'too big'; return; }
@@ -88,16 +108,17 @@
     im.onload = () => {
       const s = Math.min(im.width, im.height), c = document.createElement('canvas'); c.width = c.height = 768;
       const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, 768, 768); x.drawImage(im, (im.width - s) / 2, (im.height - s) / 2, s, s, 0, 0, 768, 768);
-      st.image = c.toDataURL('image/jpeg', .9); picImg.src = st.image; drop.classList.add('on'); picNote.textContent = 'tap to change'; URL.revokeObjectURL(url); refreshGo();
+      st.image = c.toDataURL('image/jpeg', .9); URL.revokeObjectURL(url);
+      drop.classList.add('has'); let p = drop.querySelector('img.pv'); if (!p) { p = document.createElement('img'); p.className = 'pv'; drop.prepend(p); } p.src = st.image;
+      st.still = null; st.vid = null; checkSteps(); refreshGo();
     };
     im.onerror = () => { picNote.textContent = 'didn’t open'; URL.revokeObjectURL(url); };
     im.src = url;
   });
   let tickerTouched = false;
-  nm.addEventListener('input', () => { if (!tickerTouched) tk.value = nm.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase().slice(0, 10); refreshGo(); });
-  tk.addEventListener('input', () => { tickerTouched = !!tk.value; tk.value = tk.value.replace(/[^A-Za-z0-9$]/g, '').toUpperCase(); refreshGo(); });
-  line.addEventListener('input', refreshGo);
-
+  nm.addEventListener('input', () => { if (!tickerTouched) tk.value = nm.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase().slice(0, 10); checkSteps(); refreshGo(); });
+  tk.addEventListener('input', () => { tickerTouched = !!tk.value; tk.value = tk.value.replace(/[^A-Za-z0-9$]/g, '').toUpperCase(); checkSteps(); refreshGo(); });
+  line.addEventListener('input', () => { checkSteps(); refreshGo(); });
   async function pollJob(job, onDone) {
     const t0 = Date.now();
     while (Date.now() - t0 < 6 * 60000) {
@@ -108,40 +129,55 @@
     }
     onDone(null);
   }
-  function showStill(url, cap) {
-    st.still = url;
-    pvScr.innerHTML = `<img src="${url}" alt="">`;
-    pvCap.textContent = cap || ''; $('#kCap').textContent = cap || ''; $('#dlStill').href = url; $('#dlVid').hidden = true; kit.hidden = false;
-    heartBurst($('#likes'), 8);
+  function showPromo(src, vid) {
+    camMedia.querySelectorAll('.promo, .film').forEach(n => n.remove());
+    const el = document.createElement(vid ? 'video' : 'img'); el.className = 'promo x-in'; el.src = src;
+    if (vid) { el.muted = true; el.loop = true; el.playsInline = true; el.autoplay = true; } el.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;pointer-events:none';
+    camMedia.appendChild(el); if (vid) el.play().catch(() => {});
+    floatHearts($('#camHearts'), 8);
+  }
+  function downloads() {
+    $('#dl').hidden = !st.still; $('#dlStill').href = st.still || '#';
+    const dv = $('#dlVid'); dv.hidden = !st.vid; dv.href = st.vid || '#';
+    $('#copyCap').disabled = !st.cap;
+    const box = $('#dlBox'); if (box) box.innerHTML = st.still ? `<a class="btn line sm" href="${st.still}" download="promo.jpg">save photo</a>${st.vid ? `<a class="btn sm" href="${st.vid}" download="promo.mp4">download video</a>` : ''}` : '';
   }
   pitchBtn.addEventListener('click', async () => {
     if (st.busy) return;
-    if (!st.image) return status(pitchStatus, 'Add the coin’s picture first.', true);
-    if (line.value.trim().length < 8) return status(pitchStatus, 'Write the one-line pitch first.', true);
-    st.busy = true; pitchBtn.disabled = true; pitchBtn.textContent = 'pitching…'; stepTo(2);
+    if (!st.image) return status(pitchStatus, 'Add your coin’s picture first: tap the middle.', true);
+    if (line.value.trim().length < 8) return status(pitchStatus, 'Write the pitch first.', true);
+    st.busy = true; pitchBtn.classList.add('busy'); recDot.classList.add('on');
     const c = byKey(st.cast);
-    status(pitchStatus, `${c.name} is making a ${c.fmt.replace(/s$/, '')} starring your coin. About 30 seconds.`);
-    pvScr.insertAdjacentHTML('beforeend', `<div class="film" id="filmOv"><span class="rec"></span>on set<small>${esc(c.name)} is shooting your promo</small></div>`);
+    status(pitchStatus, `${c.name} is shooting your promo… about 30 seconds`);
+    camMedia.insertAdjacentHTML('beforeend', `<div class="film"><span>on set</span><small>${esc(c.name)} is shooting</small></div>`);
     try {
       const r = await C.post('/api/pitch', { draft: { name: nm.value, symbol: tk.value, line: line.value, cast: st.cast }, image: st.image });
-      if (!r.ok) { status(pitchStatus, r.error || 'The promo didn’t come out. Try again.', true); const o = $('#filmOv'); if (o) o.remove(); return; }
-      showStill(r.still, r.caption); st.job = r.job;
+      if (!r.ok) { status(pitchStatus, r.error || 'The promo didn’t come out. Try again.', true); camMedia.querySelectorAll('.film').forEach(n => n.remove()); return; }
+      st.still = r.still; st.cap = r.caption || ''; st.vid = null; st.job = r.job;
+      showPromo(r.still); checkSteps(); downloads();
       if (r.filming) {
-        status(pitchStatus, 'The promo photo is ready. Now filming the video (about a minute).');
-        pvScr.insertAdjacentHTML('beforeend', `<div class="film" id="filmOv"><span class="rec"></span><span id="filmT">filming</span><small>5 seconds · vertical</small></div>`);
+        status(pitchStatus, 'Promo photo ready. Filming the video…');
+        camMedia.insertAdjacentHTML('beforeend', `<div class="film"><span id="filmT">filming</span><small>5 seconds · vertical</small></div>`);
         pollJob(r.job, j => {
-          const o = $('#filmOv'); if (o) o.remove();
-          if (j && j.status === 'done' && j.url) { pvScr.innerHTML = `<video src="${j.url}" muted playsinline autoplay loop></video>`; const v = pvScr.querySelector('video'); v.play().catch(() => {}); const d = $('#dlVid'); d.href = j.url; d.hidden = false; status(pitchStatus, 'Your promo is filmed. Download it, or launch and it keeps going.'); heartBurst($('#likes'), 10); }
+          camMedia.querySelectorAll('.film').forEach(n => n.remove());
+          if (j && j.status === 'done' && j.url) { st.vid = j.url; showPromo(j.url, true); downloads(); status(pitchStatus, 'Filmed. Launch it and it keeps making promos.'); }
           else status(pitchStatus, 'The video didn’t come out this time; the promo photo is yours.');
         });
-      } else status(pitchStatus, r.note ? 'The promo photo is ready. ' + r.note : 'The promo photo is ready.');
-      stepTo(3);
-    } catch { status(pitchStatus, 'The promo didn’t come out. Try again.', true); const o = $('#filmOv'); if (o) o.remove(); }
-    finally { st.busy = false; pitchBtn.disabled = false; pitchBtn.textContent = 'make another promo'; }
+      } else status(pitchStatus, r.note ? 'Promo photo ready. ' + r.note : 'Promo photo ready.');
+    } catch { status(pitchStatus, 'The promo didn’t come out. Try again.', true); camMedia.querySelectorAll('.film').forEach(n => n.remove()); }
+    finally { st.busy = false; pitchBtn.classList.remove('busy'); recDot.classList.remove('on'); }
   });
-  $('#copyCap').addEventListener('click', () => { const t = $('#kCap').textContent; if (t) C.copy(t); });
+  $('#copyCap').addEventListener('click', () => { if (st.cap) C.copy(st.cap); });
 
-  // ---------- the split and the launch ----------
+  // ---------- the launch drawer ----------
+  const drawer = $('#drawer'), xh = $('#xh'), goBtn = $('#goBtn'), goStatus = $('#goStatus'), goProg = $('#goProg'), goRes = $('#goRes');
+  $('.dpanel').insertAdjacentHTML('afterbegin', '');
+  $('#dTitle').insertAdjacentHTML('afterend', '<div class="acts" id="dlBox" style="margin:0 0 14px"></div>');
+  function openDrawer() { checkSteps(); downloads(); drawer.hidden = false; }
+  function closeDrawer() { if (!st.busy) drawer.hidden = true; }
+  $('#launchOpen').addEventListener('click', openDrawer);
+  $('#drawerBg').addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
   const handle = () => xh.value.trim().replace(/^@/, '');
   const clip32 = s => { s = s.trim(); while (new TextEncoder().encode(s).length > 32) s = s.slice(0, -1); return s; };
   function splitShow() {
@@ -161,7 +197,7 @@
     box.innerHTML = '<p class="status">its marketer is making the first promo…</p>';
     let r = null; try { r = await C.post('/api/pitch', { mint }); } catch {}
     if (!r || !r.ok || !r.job) { box.innerHTML = `<p class="status">${esc((r && r.error) || 'Its first promo comes with the next cycle.')}</p>`; return; }
-    const show = (src, vid) => { box.innerHTML = `<div class="ph" style="max-width:200px">${vid ? `<video src="${src}" muted playsinline autoplay loop></video>` : `<img src="${src}" alt="">`}</div>`; };
+    const show = (src, vid) => { box.innerHTML = `<div style="max-width:180px;aspect-ratio:9/16;border-radius:14px;overflow:hidden">${vid ? `<video src="${src}" muted playsinline autoplay loop style="width:100%;height:100%;object-fit:cover"></video>` : `<img src="${src}" alt="" style="width:100%;height:100%;object-fit:cover">`}</div>`; };
     if (r.still) show(r.still);
     if (r.filming) pollJob(r.job, j => { if (j && j.status === 'done' && j.url) show(j.url, true); });
   }
@@ -169,19 +205,19 @@
     if (st.busy || st.born || st.open === false) return;
     if (!C.S.me) { await C.connect(); refreshGo(); return; }
     const name = clip32(nm.value), symbol = tk.value.trim().replace(/^\$/, '').toUpperCase();
-    if (!st.image) return status(goStatus, 'Add the coin’s picture (up top).', true);
-    if (!name) return status(goStatus, 'Give it a name.', true);
+    if (!st.image) return status(goStatus, 'Add your coin’s picture in the pitch room.', true);
+    if (!name) return status(goStatus, 'Give it a name in the pitch room.', true);
     if (!/^[A-Z0-9]{1,10}$/.test(symbol)) return status(goStatus, 'The ticker is 1–10 letters or numbers.', true);
-    if (line.value.trim().length < 8) return status(goStatus, 'Write the one-line pitch.', true);
+    if (line.value.trim().length < 8) return status(goStatus, 'Write the pitch in the pitch room.', true);
     if (handle() && !/^[A-Za-z0-9_]{1,15}$/.test(handle())) return status(goStatus, 'That X handle doesn’t look right.', true);
     if (buy.over()) return status(goStatus, 'Up to 5 SOL in the first buy.', true);
-    st.busy = true; goBtn.disabled = true; goBtn.textContent = 'launching…'; status(goStatus, ''); goRes.hidden = true; stepTo(3);
+    st.busy = true; goBtn.disabled = true; goBtn.textContent = 'launching…'; status(goStatus, ''); goRes.hidden = true;
     try {
       const r = await X.run({ name, symbol, cast: st.cast, line: line.value.trim(), x: handle(), image: st.image, devBuy: buy.lamports(), onStep: i => X.steps(goProg, i) });
       X.steps(goProg, 99, true);
-      const live = r.settle && r.settle.live; st.born = r.mint; const c = byKey(st.cast);
+      const live = r.settle && r.settle.live; st.born = r.mint; checkSteps(); const c = byKey(st.cast);
       goRes.hidden = false;
-      goRes.innerHTML = `<p class="ok">$${esc(symbol)} is ${live ? 'live. ' + esc(c.name) + ' is on the campaign.' : 'on pump.fun.'}</p>${r.buyNote ? `<p class="status">${esc(r.buyNote)}</p>` : ''}<div id="firstPromo"></div><div class="acts"><a class="btn" href="/c/${r.mint}">its page →</a><a class="btn line" href="https://pump.fun/coin/${r.mint}" target="_blank" rel="noopener">pump.fun ↗</a><a class="btn line" href="${C.solscan('tx', r.sig)}" target="_blank" rel="noopener">solscan ↗</a></div>`;
+      goRes.innerHTML = `<p class="ok">$${esc(symbol)} is ${live ? 'live. ' + esc(c.name) + ' is on it.' : 'on pump.fun.'}</p>${r.buyNote ? `<p class="status">${esc(r.buyNote)}</p>` : ''}<div id="firstPromo"></div><div class="acts"><a class="btn" href="/c/${r.mint}">its page →</a><a class="btn line" href="https://pump.fun/coin/${r.mint}" target="_blank" rel="noopener">pump.fun ↗</a><a class="btn line" href="${C.solscan('tx', r.sig)}" target="_blank" rel="noopener">solscan ↗</a></div>`;
       C.toast('$' + symbol + ' is live.'); loadBoard(r.mint);
       if (live) firstPromo(r.mint);
     } catch (e) {
@@ -192,66 +228,34 @@
 
   // ---------- on air + clients ----------
   const seen = new Set();
-  function renderFeed() {
-    const vs = (st.board && st.board.posts) || [], el = $('#feed');
+  function renderAir() {
+    const vs = (st.board && st.board.posts) || [], el = $('#air');
     if (!vs.length) { el.innerHTML = `<div class="none"><b>nothing on air yet</b>The first client’s promo airs here the minute it launches.</div>`; return; }
     let n = 0;
     el.innerHTML = vs.map(v => { const nw = !seen.has(v.id); seen.add(v.id);
-      const media = v.status === 'done' ? `<video src="/api/film?v=${v.id}" muted playsinline loop preload="metadata" poster="/api/film?s=${v.id}"></video>` : `<img src="/api/film?s=${v.id}" alt="" loading="lazy">`;
-      return `<article class="pc${nw ? ' new' : ''}" style="--i:${nw ? n++ : 0}"><div class="ph">${media}</div><div class="meta"><a href="/c/${v.mint}">$${esc(v.symbol)}</a><p>${esc(v.caption || '')}</p></div></article>`; }).join('');
-    if ('IntersectionObserver' in window) { const io = new IntersectionObserver(es => es.forEach(en => { const v = en.target; if (en.isIntersecting && !calm) v.play().catch(() => {}); else v.pause(); }), { threshold: .5 }); $$('#feed video').forEach(v => io.observe(v)); }
+      const media = v.status === 'done' ? `<video src="/api/film?v=${v.id}" muted playsinline loop autoplay preload="metadata" poster="/api/film?s=${v.id}"></video>` : `<img src="/api/film?s=${v.id}" alt="" loading="lazy">`;
+      return `<a class="tile${nw ? ' new' : ''}" style="--i:${nw ? n++ : 0}" href="/c/${v.mint}">${media}<b>$${esc(v.symbol)}</b></a>`; }).join('');
   }
-  function sorted() {
-    const ks = ((st.board && st.board.infl) || []).slice();
+  function renderClients(hit) {
+    const ks = ((st.board && st.board.infl) || []).slice(), el = $('#clients'), sol = st.board && st.board.solUsd;
     if (st.sort === 'heavy') ks.sort((x, y) => (y.mcap_sol || 0) - (x.mcap_sol || 0) || y.slot - x.slot); else ks.sort((x, y) => y.slot - x.slot);
-    return ks;
-  }
-  function renderCoins(hit) {
-    const ks = sorted(), el = $('#nursery'), sol = st.board && st.board.solUsd;
-    if (!ks.length) { el.innerHTML = `<div class="none"><b>no clients yet</b>The first coin to hire a marketer is yours.</div>`; $('#moreBtn').hidden = true; return; }
-    el.innerHTML = ks.slice(0, st.shown).map(k => {
+    if (!ks.length) { el.innerHTML = `<div class="none"><b>no clients yet</b>The first coin to hire a marketer is yours.</div>`; return; }
+    el.innerHTML = ks.slice(0, 200).map(k => {
       const mc = k.mcap_sol != null ? (sol ? C.usd(k.mcap_sol * sol) : k.mcap_sol.toFixed(1) + ' SOL') : '—'; const c = byKey(k.niche);
-      return `<a class="cn${k.mint === hit ? ' hit' : ''}" data-m="${k.mint}" href="/c/${k.mint}"><img src="/i/${k.mint}" alt="" loading="lazy"><span><b>$${esc(k.symbol)}</b><small>${esc(k.name)} · marketed by ${esc(c.name)}</small></span><span class="v m">${k.vids || 0} promos</span><span class="v">${mc}</span></a>`;
+      return `<a class="cn${k.mint === hit ? ' hit' : ''}" data-m="${k.mint}" href="/c/${k.mint}"><img src="/i/${k.mint}" alt="" loading="lazy"><span><b>$${esc(k.symbol)}</b><small>${esc(k.name)} · ${esc(c.name)} · ${k.vids || 0} promos</small></span><span class="v">${mc}</span></a>`;
     }).join('');
-    $('#moreBtn').hidden = ks.length <= st.shown;
   }
-  $('#moreBtn').addEventListener('click', () => { st.shown += 24; renderCoins(); });
-  $('#sorts').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; st.sort = b.dataset.s; $$('#sorts button').forEach(x => x.classList.toggle('on', x === b)); renderCoins(); });
+  $('#sorts').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; st.sort = b.dataset.s; $$('#sorts button').forEach(x => x.classList.toggle('on', x === b)); renderClients(); });
   if (L) { L.births(false); L.on('trade', t => { const c = document.querySelector(`.cn[data-m="${t.mint}"]`); if (!c) return; c.classList.remove('hit'); void c.offsetWidth; c.classList.add('hit'); }); }
   async function loadBoard(hit) {
     let j = null; try { j = await C.get('/api/board'); } catch {}
-    if (!j || !j.ok) { if (!st.board) { $('#nursery').innerHTML = `<div class="none"><b>the records didn’t answer</b><button class="btn line sm" type="button" id="retryBoard">try again ↻</button></div>`; const r = $('#retryBoard'); if (r) r.onclick = () => loadBoard(); renderFeed(); } return; }
-    st.board = j; if (j.open != null) st.open = j.open; refreshGo(); renderCoins(hit); renderFeed();
+    if (!j || !j.ok) { if (!st.board) { $('#clients').innerHTML = `<div class="none"><b>the records didn’t answer</b><button class="btn line sm" type="button" id="retryBoard">try again ↻</button></div>`; const r = $('#retryBoard'); if (r) r.onclick = () => loadBoard(); renderAir(); } return; }
+    st.board = j; if (j.open != null) st.open = j.open; refreshGo(); renderClients(hit); renderAir();
     if (L) L.watch((j.infl || []).slice(0, 200).map(k => k.mint));
   }
+  C.get('/api/film?reel=1').then(j => { if (j && j.ok) (j.reel || []).forEach(r => { st.reel[r.cast] = r.url; }); }).catch(() => {});
 
-  // ---------- reveals + nav ----------
-  (function reveal() {
-    if (calm || !('IntersectionObserver' in window)) return;
-    const io = new IntersectionObserver(es => es.forEach(en => { if (!en.isIntersecting) return; en.target.classList.add('seen'); io.unobserve(en.target); }), { rootMargin: '0px 0px -8% 0px' });
-    $$('.big, .row, .card, .ad, .faq details, .rail3').forEach((el, i) => { el.classList.add('rv'); el.style.setProperty('--dl', (i % 6) * .06 + 's'); io.observe(el); });
-    const links = $$('.nav a'); const nio = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) links.forEach(a => a.classList.toggle('on', a.hash === '#' + en.target.id)); }), { rootMargin: '-45% 0px -50% 0px' });
-    ['roster', 'room', 'onair', 'clients', 'faq'].forEach(id => nio.observe(document.getElementById(id)));
-  })();
-
-
-  // ---------- motion: the wordmark glitches now and then, buttons lean toward the cursor, a cursor dot ----------
-  (function motion() {
-    if (calm) return;
-    const mark = $('#mark');
-    setInterval(() => { if (document.hidden) return; mark.classList.add('glitch'); setTimeout(() => mark.classList.remove('glitch'), 340); }, 3400);
-    if (matchMedia('(hover: none)').matches) return;
-    document.addEventListener('mousemove', e => {
-      $$('.btn').forEach(b => { const r = b.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2, dx = e.clientX - cx, dy = e.clientY - cy, dist = Math.hypot(dx, dy);
-        if (dist < 90) b.style.transform = `translate(${dx * .18}px, ${dy * .25}px)`; else if (b.style.transform) b.style.transform = ''; });
-    });
-    const dot = document.createElement('div'); dot.className = 'cur'; document.body.appendChild(dot);
-    let mx = innerWidth / 2, my = innerHeight / 2, x = mx, y = my;
-    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; dot.classList.toggle('big', !!(e.target.closest && e.target.closest('a,button,.fc,.row,.ca,.drop'))); });
-    (function loop() { x += (mx - x) * .22; y += (my - y) * .22; dot.style.transform = `translate(${x - dot.offsetWidth / 2}px, ${y - dot.offsetHeight / 2}px)`; requestAnimationFrame(loop); })();
-  })();
-
-  pickCast(st.cast); splitShow(); refreshGo(); loadBoard();
+  pickCast(st.cast); splitShow(); refreshGo(); loadBoard(); checkSteps();
   setInterval(() => { if (!document.hidden && !st.busy) loadBoard(); }, 20000);
   if (L) L.start();
 })();
