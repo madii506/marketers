@@ -80,7 +80,7 @@ const CAST = {
 const CAST_KEYS = Object.keys(CAST);
 const castOf = k => CAST[k && k.niche] || CAST[k && k.cast] || CAST.hype;
 const RULES = 'Rules: no financial advice, no price predictions, no promises of gains, never tell anyone to buy or sell, never say "100x", "moon" or "guaranteed", no real people, nothing sexual, no links.';
-const KEEP = ' Keep the character or logo from the image exactly as it is: same shape, colours and features. Photorealistic, vertical 9:16 phone video still, funny viral AI TikTok energy, sharp detail, no text, no letters, no captions, no logos other than the one from the image, no watermark.';
+const KEEP = ' Keep the character or logo from the image exactly as it is: same shape, colours and features. Photorealistic, vertical 9:16 phone video still, funny viral AI TikTok energy, sharp detail. Every screen, sign, wall and banner is blank: no words or letters anywhere, no captions, no logos other than the one from the image, no watermark.';
 async function vertical(buf) {
   return require('sharp')(buf, { limitInputPixels: 60e6 }).resize(720, 1280, { fit: 'cover', position: 'attention' }).jpeg({ quality: 86, mozjpeg: true }).toBuffer();
 }
@@ -94,7 +94,7 @@ async function describe(jpeg) {
 async function caption(k, c) {
   const r = await L.ai([{ role: 'system', content: `You are ${c.name}, ${c.role}: an AI marketer making a ${c.format} TikTok for the memecoin ${k.name} ($${k.symbol}). What the coin is, in its creator's words: """${L.clean(k.voice, 500)}""". ${k.look ? 'Its picture shows: ' + L.clean(k.look, 300) + '. ' : ''}${RULES}` },
     { role: 'user', content: `Write the TikTok caption for this promo: one punchy hook line under 110 characters in your voice, then three hashtags including #aigenerated, and $${k.symbol} once. Plain text only.` }], 100, 15000).catch(() => null);
-  const t = r && r.ok ? L.scrub(String(r.text || '').replace(/^"|"$/g, ''), 180) : '';
+  const t = r && r.ok ? L.scrub(String(r.text || '').replace(/^"|"$/g, '').replace(/#\$/g, '$').replace(/\*/g, ''), 180) : '';
   return t && !L.BANNED.test(t) ? t : `${c.name} has a word about $${k.symbol}. #aigenerated #fyp #memecoin`;
 }
 // the promo still: the marketer's scene, starring the coin's own picture
