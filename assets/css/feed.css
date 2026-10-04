@@ -32,7 +32,7 @@ button, input { font: inherit; color: inherit; }
 .ic.home { --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 11 12 3l9 8v10h-6v-6H9v6H3z'/%3E%3C/svg%3E"); }
 .ic.team { --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='8' cy='8' r='4'/%3E%3Ccircle cx='17' cy='9' r='3'/%3E%3Cpath d='M1 21c0-4 3-7 7-7s7 3 7 7zM14 21c0-2 1-4 3-5 3 0 6 2 6 5z'/%3E%3C/svg%3E"); }
 .ic.cam { --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M2 7h13v10H2zM16 10l6-3v10l-6-3z'/%3E%3C/svg%3E"); }
-.ic.live { --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill-rule='evenodd' d='M12 2a10 10 0 1 0 0 20a10 10 0 1 0 0-20zM10 7.5l6 4.5-6 4.5z'/%3E%3C/svg%3E"); }
+.ic.live { --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M2 5h20v13H2zM8 20h8v2H8z'/%3E%3C/svg%3E"); }
 .ic.list { --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 5h18v3H3zM3 10.5h18v3H3zM3 16h18v3H3z'/%3E%3C/svg%3E"); }
 .ic.chat { --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 4h18v12H8l-5 4z'/%3E%3C/svg%3E"); }
 .wallet { margin-top: auto; display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 16px; border-radius: 10px; border: 0; background: var(--rd); color: #fff; font: 900 17px/1 var(--d); letter-spacing: .1em; text-transform: uppercase; cursor: pointer; box-shadow: -3px -3px 0 var(--cy); }
