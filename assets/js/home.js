@@ -44,10 +44,17 @@
 
   // ---------- the intro: the wordmark letter by letter over a montage of the roster ----------
   $('#mark').innerHTML = [...'MARKETERS'].map((ch, i) => `<span class="gl" data-t="${ch}" style="--i:${i}">${ch}</span>`).join('');
-  (function montage() {
-    const box = $('#introMedia'); let i = 0;
-    function show() { const c = CAST[i % CAST.length]; i++; const im = new Image(); im.src = pic(c); im.alt = ''; im.className = 'x-in' + (calm ? '' : ' kb'); box.appendChild(im); while (box.children.length > 2) box.firstChild.remove(); }
-    show(); if (!calm) setInterval(() => { if (!document.hidden) show(); }, 2800);
+  (function mosaic() {
+    const box = $('#mosaic'); const order = [0, 1, 2, 3, 4, 5];
+    box.innerHTML = order.map((n, i) => `<div class="t" style="--i:${i}"><img src="${pic(CAST[n])}" alt="" style="animation-delay:-${i * 1.3}s"></div>`).join('');
+    const tiles = $$('.t', box); let k = 0;
+    if (!calm) setInterval(() => {
+      if (document.hidden) return;
+      const t = tiles[Math.floor(Math.random() * tiles.length)], img = t.querySelector('img');
+      t.classList.remove('flip'); void t.offsetWidth; t.classList.add('flip');
+      setTimeout(() => { img.src = pic(CAST[(k++ + 3) % CAST.length]); }, 330);
+    }, 1700);
+    $('#faces').innerHTML = CAST.map(c => `<img src="${pic(c)}" alt="${esc(c.name)}" title="${esc(c.name + ', ' + c.role)}" data-hire="${c.k}">`).join('');
   })();
   if (!calm) setInterval(() => { const m = $('#mark'); if (document.hidden || !m) return; m.classList.add('glitch'); setTimeout(() => m.classList.remove('glitch'), 340); }, 3200);
 
