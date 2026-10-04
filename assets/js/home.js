@@ -36,30 +36,7 @@
   })();
 
   // ---------- the roster cards ----------
-  const cardHtml = c => `<article class="card" data-k="${c.k}"><img src="${pic(c)}" alt="${esc(c.name)}, ${esc(c.role)}" loading="lazy"><div class="ct"><b>${esc(c.name)}</b><span>${esc(c.role)}</span><p>${esc(c.what)}</p><button class="btn" type="button" data-hire="${c.k}">hire ${esc(c.name)}</button></div></article>`;
-  $('#cards').innerHTML = CAST.map(cardHtml).join('') + CAST.map(cardHtml).join('');
-  // the roster drifts sideways on its own, loops forever, and stops while you hover or touch it
-  (function drift() {
-    const row = $('#cards'); if (calm) return;
-    let paused = false, t = null, last = performance.now();
-    const hold = () => { paused = true; clearTimeout(t); }, free = (ms) => { clearTimeout(t); t = setTimeout(() => { paused = false; }, ms); };
-    row.addEventListener('mouseenter', hold); row.addEventListener('mouseleave', () => free(400));
-    row.addEventListener('touchstart', hold, { passive: true }); row.addEventListener('touchend', () => free(2500), { passive: true });
-    row.addEventListener('focusin', hold); row.addEventListener('focusout', () => free(600));
-    (function step(now) {
-      const dt = Math.min(64, now - last); last = now;
-      if (!paused && !document.hidden) { row.scrollLeft += dt * 0.045; const half = row.scrollWidth / 2; if (row.scrollLeft >= half) row.scrollLeft -= half; }
-      requestAnimationFrame(step);
-    })(last);
-  })();
-  // the house promos: each marketer pitching MARKETERS itself, made by the same pipeline as yours
-  C.get('/api/film?house=1').then(j => {
-    const hs = (j && j.ok && j.house) || []; if (!hs.length) return;
-    const one = h => { const c = byKey(h.cast); return `<div class="pw2">${h.url ? `<video src="${h.url}" muted playsinline autoplay loop poster="${h.still}"></video>` : `<img src="${h.still}" alt="" loading="lazy">`}<div class="wl"><b>@${c.name.toLowerCase()}.markets</b>${esc(c.role)} · for $MARKETERS</div></div>`; };
-    const list = hs.concat(hs.length < 6 ? hs : []);
-    $('#ptrack').innerHTML = list.map(one).join('') + list.map(one).join('');
-    $('#promos').hidden = false;
-  }).catch(() => {});
+  $('#cards').innerHTML = CAST.map(c => `<article class="card" data-k="${c.k}"><img src="${pic(c)}" alt="${esc(c.name)}, ${esc(c.role)}" loading="lazy"><div class="ct"><b>${esc(c.name)}</b><span>${esc(c.role)}</span><p>${esc(c.what)}</p><button class="btn" type="button" data-hire="${c.k}">hire ${esc(c.name)}</button></div></article>`).join('');
   document.addEventListener('click', e => {
     const h = e.target.closest('[data-hire]'); if (!h) return;
     pickCast(h.dataset.hire); document.getElementById('room').scrollIntoView({ behavior: calm ? 'auto' : 'smooth' });
