@@ -1,24 +1,23 @@
-// MARKETERS home, built as a feed: full-screen screens that snap. For you → one screen per marketer → the pitch room
-// (a camera: picture, pitch, pick a marketer, record) → on air → clients → questions. Launch opens as a drawer.
-// Every promo here is made from a real coin picture; when there are none yet, the screen says so.
+// MARKETERS home: page one (the claim, windows scrolling beside it), the roster cards, the pitch room (a camera: picture,
+// pitch, pick a marketer, record), the launch, on air, clients, questions.
+// Every promo here is made from a real coin picture; when there are none yet, the page says so.
 (function () {
   'use strict';
   const C = window.Core, X = window.Cross, L = window.Live;
   const { $, $$, esc } = C;
   const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const CAST = [
-    { k: 'hype', name: 'Doug', role: 'the street hype', what: 'Megaphone promos on a busy street, holding your coin up for the whole city.', img: 1 },
-    { k: 'keynote', name: 'Pip', role: 'the keynote', what: 'A stage, a spotlight, your coin on the giant screen behind it.', img: 2 },
-    { k: 'infomercial', name: 'Lola', role: 'the infomercial', what: 'Late-night TV energy. Your coin as the product nobody can live without.', img: 3 },
-    { k: 'strategy', name: 'Otto', role: 'the strategist', what: 'A whiteboard full of sticky notes with your coin pinned in the middle.', img: 4 },
-    { k: 'model', name: 'Bruno', role: 'the face', what: 'A glamour photoshoot next to a statue of your coin. Flashes everywhere.', img: 5 },
-    { k: 'hotline', name: 'Kiki', role: 'the hotline', what: 'A call center that only talks about your coin, all day.', img: 6 },
+    { k: 'hype', name: 'Doug', role: 'the street hype', what: 'Megaphone promos on a busy street, your coin held up for the whole city.', img: 1 },
+    { k: 'keynote', name: 'Pip', role: 'the keynote', what: 'A stage, a spotlight, your coin on the giant screen.', img: 2 },
+    { k: 'infomercial', name: 'Lola', role: 'the infomercial', what: 'Late-night TV. Your coin as the product nobody can live without.', img: 3 },
+    { k: 'strategy', name: 'Otto', role: 'the strategist', what: 'A whiteboard of sticky notes with your coin pinned in the middle.', img: 4 },
+    { k: 'model', name: 'Bruno', role: 'the face', what: 'A glamour photoshoot next to a statue of your coin.', img: 5 },
+    { k: 'hotline', name: 'Kiki', role: 'the hotline', what: 'A call center that only talks about your coin.', img: 6 },
   ];
   const pic = c => '/assets/img/m' + c.img + '.jpg';
   const byKey = k => CAST.find(c => c.k === k) || CAST[0];
   const st = { cast: 'hype', image: null, job: null, still: null, vid: null, cap: '', busy: false, born: null, open: null, board: null, sort: 'new', reel: {} };
   const status = (el, t, bad) => { el.textContent = t || ''; el.classList.toggle('bad', !!bad); };
-  const feed = $('#feed');
   function floatHearts(box, n) {
     if (calm || !box) return;
     for (let i = 0; i < n; i++) setTimeout(() => {
@@ -26,80 +25,28 @@
       h.style.background = ['var(--rd)', 'var(--rd)', '#fff', 'var(--cy)'][i % 4]; box.appendChild(h); setTimeout(() => h.remove(), 2500);
     }, i * 120);
   }
-  function burst(phone, x, y) { const b = document.createElement('i'); b.className = 'burst'; b.style.left = x + 'px'; b.style.top = y + 'px'; phone.appendChild(b); setTimeout(() => b.remove(), 800); }
 
-  // ---------- the roster screens ----------
-  $('#roster').outerHTML = CAST.map(c => `
-  <section class="slide" id="s-${c.k}" data-k="${c.k}">
-    <div class="phone">
-      <div class="media"><img class="kb" src="${pic(c)}" alt="${esc(c.name)}, ${esc(c.role)}" loading="lazy"></div>
-      <div class="shade"></div>
-      <div class="rail"><button class="av" type="button" data-hire="${c.k}" aria-label="Hire ${esc(c.name)}"><img src="${pic(c)}" alt=""></button><button class="like" type="button" aria-label="Like"><i></i></button><button class="cmt" type="button" data-go="s-faq" aria-label="Questions"><i></i></button><button class="shr" type="button" aria-label="Share"><i></i></button><span class="disc"><img src="${pic(c)}" alt=""></span></div>
-      <div class="cap"><b>@${c.name.toLowerCase()}.markets</b><p>${esc(c.role)}. ${esc(c.what)}</p><div class="snd"><span>♫ ${esc(c.name)} is pitching your coin · ${esc(c.name)} is pitching your coin · </span></div></div>
-      <div class="hearts"></div>
-    </div>
-    <div class="info"><h2>${esc(c.name)}</h2><p class="role">${esc(c.role)}</p><p>${esc(c.what)}</p><button class="btn" type="button" data-hire="${c.k}">hire ${esc(c.name)}</button></div>
-  </section>`).join('');
-  const slides = $$('.slide');
-
-  // ---------- the intro: the wordmark letter by letter over a montage of the roster ----------
+  // ---------- page one: the wordmark letter by letter, windows scrolling in three columns ----------
   $('#mark').innerHTML = [...'MARKETERS'].map((ch, i) => `<span class="gl" data-t="${ch}" style="--i:${i}">${ch}</span>`).join('');
-  (function mosaic() {
-    const box = $('#mosaic'); const order = [0, 1, 2, 3, 4, 5];
-    box.innerHTML = order.map((n, i) => `<div class="t" style="--i:${i}"><img src="${pic(CAST[n])}" alt="" style="animation-delay:-${i * 1.3}s"></div>`).join('');
-    const tiles = $$('.t', box); let k = 0;
-    if (!calm) setInterval(() => {
-      if (document.hidden) return;
-      const t = tiles[Math.floor(Math.random() * tiles.length)], img = t.querySelector('img');
-      t.classList.remove('flip'); void t.offsetWidth; t.classList.add('flip');
-      setTimeout(() => { img.src = pic(CAST[(k++ + 3) % CAST.length]); }, 330);
-    }, 1700);
-    $('#faces').innerHTML = CAST.map(c => `<img src="${pic(c)}" alt="${esc(c.name)}" title="${esc(c.name + ', ' + c.role)}" data-hire="${c.k}">`).join('');
-  })();
   if (!calm) setInterval(() => { const m = $('#mark'); if (document.hidden || !m) return; m.classList.add('glitch'); setTimeout(() => m.classList.remove('glitch'), 340); }, 3200);
+  (function cols() {
+    const order = [[0, 3, 1, 4, 2, 5], [4, 1, 5, 2, 0, 3], [2, 5, 0, 3, 1, 4]];
+    const win = (n, j) => { const c = CAST[n]; return `<div class="win${j % 3 === 1 ? ' c' : ''}" data-hire="${c.k}"><img src="${pic(c)}" alt="" loading="${j < 3 ? 'eager' : 'lazy'}"><i class="hh"></i><div class="wl"><b>@${c.name.toLowerCase()}.markets</b>${esc(c.role)}</div><div class="pb"><i style="--dl:-${(j * 1.1).toFixed(1)}s"></i></div></div>`; };
+    $('#cols').innerHTML = order.map(o => `<div class="col"><div class="track">${o.map(win).join('')}${o.map(win).join('')}</div></div>`).join('');
+  })();
 
-  // ---------- moving through the feed: the active screen, the menu, the dots, the keys ----------
-  const dots = $('#dots'); dots.innerHTML = slides.map(s => `<button type="button" data-go="${s.id}" aria-label="${s.id}"></button>`).join('');
-  function go(id) { const el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: calm ? 'auto' : 'smooth' }); }
+  // ---------- the roster cards ----------
+  $('#cards').innerHTML = CAST.map(c => `<article class="card" data-k="${c.k}"><img src="${pic(c)}" alt="${esc(c.name)}, ${esc(c.role)}" loading="lazy"><div class="ct"><b>${esc(c.name)}</b><span>${esc(c.role)}</span><p>${esc(c.what)}</p><button class="btn" type="button" data-hire="${c.k}">hire ${esc(c.name)}</button></div></article>`).join('');
   document.addEventListener('click', e => {
-    const g = e.target.closest('[data-go]'); if (g) { e.preventDefault(); go(g.dataset.go); return; }
-    const m = e.target.closest('.menu a, .logo'); if (m && m.getAttribute('href')) { e.preventDefault(); go(m.getAttribute('href').slice(1)); return; }
-    const h = e.target.closest('[data-hire]'); if (h) { pickCast(h.dataset.hire); go('s-pitch'); return; }
-    const lk = e.target.closest('.like'); if (lk) { lk.classList.toggle('on'); floatHearts(lk.closest('.phone').querySelector('.hearts'), lk.classList.contains('on') ? 8 : 0); return; }
-    const sh = e.target.closest('.shr'); if (sh) { const sl = sh.closest('.slide'); C.copy(location.origin + '/#' + (sl ? sl.id : '')); return; }
+    const h = e.target.closest('[data-hire]'); if (!h) return;
+    pickCast(h.dataset.hire); document.getElementById('room').scrollIntoView({ behavior: calm ? 'auto' : 'smooth' });
   });
-  // double-tap a screen to like it
-  feed.addEventListener('dblclick', e => {
-    const ph = e.target.closest('.phone'); if (!ph || ph.classList.contains('list') || e.target.closest('input,button,label')) return;
-    const r = ph.getBoundingClientRect(); burst(ph, e.clientX - r.left, e.clientY - r.top);
-    const lk = ph.querySelector('.like'); if (lk && !lk.classList.contains('on')) lk.classList.add('on'); floatHearts(ph.querySelector('.hearts'), 6);
-  });
-  let current = slides[0];
-  const io = new IntersectionObserver(es => es.forEach(en => {
-    if (!en.isIntersecting) return;
-    const s = en.target; current = s;
-    slides.forEach(x => x.classList.toggle('on', x === s));
-    $$('#dots button').forEach(b => b.classList.toggle('on', b.dataset.go === s.id));
-    const k = s.dataset.k, sec = k ? 's-hype' : s.id;
-    $$('.menu a').forEach(a => a.classList.toggle('on', a.dataset.s === sec));
-    $$('video').forEach(v => { if (s.contains(v)) v.play().catch(() => {}); else v.pause(); });
-    if (k) { const media = s.querySelector('.media'); const r = st.reel[k]; if (r && !media.querySelector('video')) media.innerHTML = `<video src="${r}" muted playsinline autoplay loop></video>`; floatHearts(s.querySelector('.hearts'), 5); }
-    if (s.id === 's-intro') floatHearts(s.querySelector('.hearts'), 4);
-  }), { root: feed, threshold: .6 });
-  slides.forEach(s => io.observe(s));
-  document.addEventListener('keydown', e => {
-    if (e.target.closest && e.target.closest('input, textarea') || !$('#drawer').hidden) return;
-    const i = slides.indexOf(current);
-    if (['ArrowDown', 'PageDown'].includes(e.key) && i < slides.length - 1) { e.preventDefault(); go(slides[i + 1].id); }
-    if (['ArrowUp', 'PageUp'].includes(e.key) && i > 0) { e.preventDefault(); go(slides[i - 1].id); }
-  });
-  if (location.hash && document.getElementById(location.hash.slice(1))) setTimeout(() => go(location.hash.slice(1)), 200);
 
   // ---------- the pitch room ----------
   const tray = $('#tray'), drop = $('#drop'), picIn = $('#pic'), picNote = $('#picNote'), nm = $('#nm'), tk = $('#tk'), line = $('#line');
   const pitchBtn = $('#pitchBtn'), pitchStatus = $('#pitchStatus'), camMedia = $('#camMedia'), recDot = $('#recDot'), camTitle = $('#camTitle');
   tray.innerHTML = CAST.map(c => `<button type="button" data-k="${c.k}" title="${esc(c.name + ', ' + c.role)}" class="${c.k === st.cast ? 'on' : ''}"><img src="${pic(c)}" alt="${esc(c.name)}"></button>`).join('');
-  function pickCast(k) { st.cast = k; $$('#tray button').forEach(b => b.classList.toggle('on', b.dataset.k === k)); const c = byKey(k); camTitle.textContent = c.name + ' · ' + c.role; checkSteps(); }
+  function pickCast(k) { st.cast = k; $$('#tray button').forEach(b => b.classList.toggle('on', b.dataset.k === k)); $$('.card').forEach(c => c.classList.toggle('on', c.dataset.k === k)); const c = byKey(k); camTitle.textContent = c.name + ' · ' + c.role; checkSteps(); }
   tray.addEventListener('click', e => { const b = e.target.closest('button'); if (b) pickCast(b.dataset.k); });
   function checkSteps() {
     $('#h1').classList.toggle('ok', !!st.image);
@@ -144,10 +91,8 @@
     floatHearts($('#camHearts'), 8);
   }
   function downloads() {
-    $('#dl').hidden = !st.still; $('#dlStill').href = st.still || '#';
-    const dv = $('#dlVid'); dv.hidden = !st.vid; dv.href = st.vid || '#';
+    const d = $('#dlBtn'); d.href = st.vid || st.still || '#'; d.setAttribute('download', st.vid ? 'promo.mp4' : 'promo.jpg'); d.setAttribute('aria-disabled', st.still ? 'false' : 'true'); d.textContent = st.vid ? 'video' : 'save';
     $('#copyCap').disabled = !st.cap;
-    const box = $('#dlBox'); if (box) box.innerHTML = st.still ? `<a class="btn line sm" href="${st.still}" download="promo.jpg">save photo</a>${st.vid ? `<a class="btn sm" href="${st.vid}" download="promo.mp4">download video</a>` : ''}` : '';
   }
   pitchBtn.addEventListener('click', async () => {
     if (st.busy) return;
@@ -176,15 +121,8 @@
   });
   $('#copyCap').addEventListener('click', () => { if (st.cap) C.copy(st.cap); });
 
-  // ---------- the launch drawer ----------
-  const drawer = $('#drawer'), xh = $('#xh'), goBtn = $('#goBtn'), goStatus = $('#goStatus'), goProg = $('#goProg'), goRes = $('#goRes');
-  $('.dpanel').insertAdjacentHTML('afterbegin', '');
-  $('#dTitle').insertAdjacentHTML('afterend', '<div class="acts" id="dlBox" style="margin:0 0 14px"></div>');
-  function openDrawer() { checkSteps(); downloads(); drawer.hidden = false; }
-  function closeDrawer() { if (!st.busy) drawer.hidden = true; }
-  $('#launchOpen').addEventListener('click', openDrawer);
-  $('#drawerBg').addEventListener('click', closeDrawer);
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
+  // ---------- the launch ----------
+  const xh = $('#xh'), goBtn = $('#goBtn'), goStatus = $('#goStatus'), goProg = $('#goProg'), goRes = $('#goRes');
   const handle = () => xh.value.trim().replace(/^@/, '');
   const clip32 = s => { s = s.trim(); while (new TextEncoder().encode(s).length > 32) s = s.slice(0, -1); return s; };
   function splitShow() {
@@ -236,7 +174,7 @@
   // ---------- on air + clients ----------
   const seen = new Set();
   function renderAir() {
-    const vs = (st.board && st.board.posts) || [], el = $('#air');
+    const vs = (st.board && st.board.posts) || [], el = $('#feed');
     if (!vs.length) { el.innerHTML = `<div class="none"><b>nothing on air yet</b>The first client’s promo airs here the minute it launches.</div>`; return; }
     let n = 0;
     el.innerHTML = vs.map(v => { const nw = !seen.has(v.id); seen.add(v.id);
@@ -244,7 +182,7 @@
       return `<a class="tile${nw ? ' new' : ''}" style="--i:${nw ? n++ : 0}" href="/c/${v.mint}">${media}<b>$${esc(v.symbol)}</b></a>`; }).join('');
   }
   function renderClients(hit) {
-    const ks = ((st.board && st.board.infl) || []).slice(), el = $('#clients'), sol = st.board && st.board.solUsd;
+    const ks = ((st.board && st.board.infl) || []).slice(), el = $('#clientList'), sol = st.board && st.board.solUsd;
     if (st.sort === 'heavy') ks.sort((x, y) => (y.mcap_sol || 0) - (x.mcap_sol || 0) || y.slot - x.slot); else ks.sort((x, y) => y.slot - x.slot);
     if (!ks.length) { el.innerHTML = `<div class="none"><b>no clients yet</b>The first coin to hire a marketer is yours.</div>`; return; }
     el.innerHTML = ks.slice(0, 200).map(k => {
@@ -256,11 +194,20 @@
   if (L) { L.births(false); L.on('trade', t => { const c = document.querySelector(`.cn[data-m="${t.mint}"]`); if (!c) return; c.classList.remove('hit'); void c.offsetWidth; c.classList.add('hit'); }); }
   async function loadBoard(hit) {
     let j = null; try { j = await C.get('/api/board'); } catch {}
-    if (!j || !j.ok) { if (!st.board) { $('#clients').innerHTML = `<div class="none"><b>the records didn’t answer</b><button class="btn line sm" type="button" id="retryBoard">try again ↻</button></div>`; const r = $('#retryBoard'); if (r) r.onclick = () => loadBoard(); renderAir(); } return; }
+    if (!j || !j.ok) { if (!st.board) { $('#clientList').innerHTML = `<div class="none"><b>the records didn’t answer</b><button class="btn line sm" type="button" id="retryBoard">try again ↻</button></div>`; const r = $('#retryBoard'); if (r) r.onclick = () => loadBoard(); renderAir(); } return; }
     st.board = j; if (j.open != null) st.open = j.open; refreshGo(); renderClients(hit); renderAir();
     if (L) L.watch((j.infl || []).slice(0, 200).map(k => k.mint));
   }
   C.get('/api/film?reel=1').then(j => { if (j && j.ok) (j.reel || []).forEach(r => { st.reel[r.cast] = r.url; }); }).catch(() => {});
+
+  // ---------- reveals + nav ----------
+  (function reveal() {
+    if (calm || !('IntersectionObserver' in window)) return;
+    const io = new IntersectionObserver(es => es.forEach(en => { if (!en.isIntersecting) return; en.target.classList.add('seen'); io.unobserve(en.target); }), { rootMargin: '0px 0px -8% 0px' });
+    $$('.big, .card, .room > *, .comments li').forEach((el, i) => { el.classList.add('rv'); el.style.setProperty('--dl', (i % 6) * .07 + 's'); io.observe(el); });
+    const links = $$('.nav a'); const nio = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) links.forEach(a => a.classList.toggle('on', a.hash === '#' + en.target.id)); }), { rootMargin: '-45% 0px -50% 0px' });
+    ['roster', 'room', 'air', 'clients', 'faq'].forEach(id => nio.observe(document.getElementById(id)));
+  })();
 
   pickCast(st.cast); splitShow(); refreshGo(); loadBoard(); checkSteps();
   setInterval(() => { if (!document.hidden && !st.busy) loadBoard(); }, 20000);
