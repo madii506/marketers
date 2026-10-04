@@ -414,7 +414,7 @@ body { overflow: visible; overflow-x: clip; height: auto; }
 @media (prefers-reduced-motion: reduce) { .hero .mark .gl, .hero .claim, .hero .sub, .ctas, .hero .live, .rv { opacity: 1 !important; transform: none !important; } .big.rv { clip-path: none; } }
 
 /* the roster drifts on its own; the house promos run the other way underneath */
-.cards { scroll-snap-type: none; scroll-behavior: auto; }
+.cards { scroll-snap-type: x proximity; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
 .promos { overflow: hidden; margin-top: 18px; -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
 .promos[hidden] { display: none; }
 .ptrack { display: flex; gap: 14px; width: max-content; animation: pmq 60s linear infinite; }
@@ -428,3 +428,12 @@ body { overflow: visible; overflow-x: clip; height: auto; }
 .pw2 .wl b { display: block; font-size: 13px; }
 .pw2:nth-child(odd) { box-shadow: -4px -4px 0 var(--cy); } .pw2:nth-child(even) { box-shadow: 4px 4px 0 var(--rd); }
 @media (max-width: 560px) { .pw2 { width: 140px; } }
+
+/* smoother: everything that moves runs on the GPU */
+.track { will-change: transform; transform: translate3d(0, 0, 0); backface-visibility: hidden; }
+@keyframes colup { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(0, -50%, 0); } }
+@keyframes coldown { from { transform: translate3d(0, -50%, 0); } to { transform: translate3d(0, 0, 0); } }
+.win, .card, .btn, .tp { will-change: transform; }
+.card { transition: transform .45s cubic-bezier(.2, .8, .2, 1), box-shadow .45s ease; }
+.card img { transition: transform 1s cubic-bezier(.2, .8, .2, 1); }
+.rv { transition-duration: .9s; transition-timing-function: cubic-bezier(.2, .8, .2, 1); }
