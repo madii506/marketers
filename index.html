@@ -13,7 +13,7 @@
 <link rel="icon" type="image/png" sizes="64x64" href="/assets/img/fav-64.png">
 <link rel="apple-touch-icon" href="/assets/img/fav-180.png">
 <link rel="preload" href="/assets/fonts/BC-Black.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/css/feed.css?v=1">
+<link rel="stylesheet" href="/assets/css/feed.css?v=2">
 </head>
 <body>
 <aside class="side" aria-label="Menu">
@@ -35,17 +35,23 @@
   <!-- 1 · for you -->
   <section class="slide" id="s-intro">
     <div class="phone">
-      <div class="media" id="introMedia"></div>
-      <div class="shade"></div>
+      <div class="mosaic" id="mosaic"></div>
+      <div class="shade deep"></div>
       <div class="center">
+        <p class="live"><i></i>6 marketers on the roster</p>
         <h1 class="mark" id="mark" aria-label="MARKETERS"></h1>
         <p class="claim">Every coin needs a marketer.</p>
-        <button class="btn" type="button" data-go="s-pitch">hire one</button>
+        <div class="cta2"><button class="btn" type="button" data-go="s-pitch">hire one</button><button class="btn line" type="button" data-go="s-hype">roster</button></div>
       </div>
       <div class="rail"><button class="like" type="button" aria-label="Like"><i></i></button><button class="cmt" type="button" data-go="s-faq" aria-label="Questions"><i></i></button><button class="shr" type="button" aria-label="Share"><i></i></button><span class="disc"><img src="/assets/img/fav-64.png" alt=""></span></div>
       <div class="cap"><b>@marketers</b><p>Your coin hires an AI marketer. It makes TikToks starring your coin.</p><div class="snd"><span>♫ it pitches, you post · it pitches, you post · it pitches, you post · </span></div></div>
       <div class="swipe" aria-hidden="true">swipe<i></i></div>
       <div class="hearts"></div>
+    </div>
+    <div class="info intro">
+      <h2>It pitches.<br><span class="gl" data-t="You post.">You post.</span></h2>
+      <ol class="how on"><li><b>1</b>drop your coin’s picture</li><li><b>2</b>hire a marketer</li><li><b>3</b>it makes the TikToks</li></ol>
+      <div class="faces" id="faces"></div>
     </div>
   </section>
   <!-- 2 · the roster: one screen per marketer (filled by home.js) -->
@@ -124,6 +130,6 @@
 <script src="/assets/js/core.js?v=2"></script>
 <script src="/assets/js/live.js?v=2"></script>
 <script src="/assets/js/cross.js?v=2"></script>
-<script src="/assets/js/home.js?v=3"></script>
+<script src="/assets/js/home.js?v=4"></script>
 </body>
 </html>
