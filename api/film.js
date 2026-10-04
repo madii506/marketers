@@ -2,6 +2,8 @@
 // GET  /api/film?s=N     the promo's still (JPEG).   GET /api/film?v=N  the promo's video (MP4, byte ranges).
 // GET  /api/film?reel=1  the house reel (the roster's own videos, once filmed).
 // POST /api/film {brand, key}  film one roster video for the house reel (once per marketer).
+// GET  /api/film?house=1  the house's own promos (each marketer pitching MARKETERS itself).
+// POST /api/film {house: key}  make the house promo for one marketer (once per marketer).
 const L = require('./_lib');
 const M = require('./_mk');
 async function serveMp4(req, res, id) {
@@ -31,6 +33,10 @@ module.exports = async (req, res) => {
         if (!r.length) { res.statusCode = 404; return res.end(); }
         res.statusCode = 200; res.setHeader('Content-Type', 'image/jpeg'); res.setHeader('Cache-Control', 'public, max-age=86400, s-maxage=31536000, immutable'); return res.end(Buffer.from(r[0].still));
       }
+      if (qy.house) {
+        const r = await L.q(`SELECT id, trend, caption, status FROM m0_vids WHERE kind='house' AND status IN ('still','pending','done') ORDER BY id`);
+        return L.send(res, 200, { ok: true, house: r.map(v => ({ id: v.id, cast: v.trend, caption: v.caption, still: '/api/film?s=' + v.id, url: v.status === 'done' ? '/api/film?v=' + v.id : null })) }, L.CACHE(30, 600));
+      }
       if (qy.reel) {
         const r = await L.q(`SELECT id, trend FROM m0_vids WHERE kind='brand' AND status='done' ORDER BY id`);
         return L.send(res, 200, { ok: true, reel: r.map(v => ({ id: v.id, cast: v.trend, url: '/api/film?v=' + v.id })) }, L.CACHE(30, 600));
@@ -43,7 +49,18 @@ module.exports = async (req, res) => {
       return L.send(res, 200, view(v));
     }
     if (req.method !== 'POST') return L.send(res, 405, { ok: false, error: 'POST only.' });
-    const b = await L.body(req, 4096), key = String(b.brand || '');
+    const b = await L.body(req, 4096);
+    if (b.house != null) {
+      const hk = String(b.house); if (!M.CAST[hk]) return L.send(res, 200, { ok: false, error: 'No such marketer.' });
+      const have = await L.q(`SELECT id FROM m0_vids WHERE kind='house' AND trend=$1 AND status IN ('still','pending','done')`, [hk]);
+      if (have.length) return L.send(res, 200, { ok: true, job: have[0].id, have: true });
+      const logo = await fetch(L.origin(req) + '/assets/img/fav-512.png', { signal: AbortSignal.timeout(10000) }).then(r => r.ok ? r.arrayBuffer() : null).catch(() => null);
+      if (!logo) return L.send(res, 200, { ok: false, error: 'No logo.' });
+      const pic = await require('sharp')(Buffer.from(logo)).resize(640, 640, { fit: 'contain', background: '#000000' }).extend({ top: 64, bottom: 64, left: 64, right: 64, background: '#000000' }).flatten({ background: '#000000' }).jpeg({ quality: 90 }).toBuffer();
+      const k = { name: 'MARKETERS', symbol: 'MARKETERS', voice: 'an ad agency for memecoins, run by AI animals', look: 'a bold white letter M with a cyan and a red offset outline', niche: hk };
+      return L.send(res, 200, await M.pitch({ k, refB64: pic.toString('base64'), kind: 'house', site: L.origin(req) }));
+    }
+    const key = String(b.brand || '');
     const c = M.CAST[key]; if (!c) return L.send(res, 200, { ok: false, error: 'No such marketer.' });
     const have = await L.q(`SELECT id, status FROM m0_vids WHERE kind='brand' AND trend=$1 AND status IN ('pending','done')`, [key]);
     if (have.length) return L.send(res, 200, { ok: true, job: have[0].id, status: have[0].status });
