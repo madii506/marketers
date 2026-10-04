@@ -13,90 +13,89 @@
 <link rel="icon" type="image/png" sizes="64x64" href="/assets/img/fav-64.png">
 <link rel="apple-touch-icon" href="/assets/img/fav-180.png">
 <link rel="preload" href="/assets/fonts/BC-Black.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/css/feed.css?v=2">
+<link rel="stylesheet" href="/assets/css/site.css?v=1">
 </head>
 <body>
-<aside class="side" aria-label="Menu">
-  <a class="logo" href="#s-intro"><img src="/assets/img/fav-64.png" alt=""><span class="gl" data-t="MARKETERS">MARKETERS</span></a>
-  <nav class="menu" id="menu">
-    <a href="#s-intro" data-s="s-intro"><i class="ic home"></i>for you</a>
-    <a href="#s-hype" data-s="s-hype"><i class="ic team"></i>roster</a>
-    <a href="#s-pitch" data-s="s-pitch"><i class="ic cam"></i>pitch room</a>
-    <a href="#s-air" data-s="s-air"><i class="ic live"></i>on air</a>
-    <a href="#s-clients" data-s="s-clients"><i class="ic list"></i>clients</a>
-    <a href="#s-faq" data-s="s-faq"><i class="ic chat"></i>faq</a>
-  </nav>
+<header class="bar">
+  <a class="logo" href="/" aria-label="MARKETERS"><img src="/assets/img/fav-64.png" alt=""><span class="gl" data-t="MARKETERS">MARKETERS</span></a>
+  <nav class="nav" aria-label="Sections"><a href="#roster">roster</a><a href="#room">pitch room</a><a href="#air">on air</a><a href="#clients">clients</a><a href="#faq">faq</a></nav>
   <button class="wallet" id="walletBtn" type="button"><i></i><span>connect</span></button>
-</aside>
-<header class="top"><a class="logo" href="#s-intro"><img src="/assets/img/fav-64.png" alt=""><span class="gl" data-t="MARKETERS">MARKETERS</span></a></header>
+</header>
 <span id="live-sr" class="sr" aria-live="polite"></span>
+<main>
+  <!-- page one: the claim on the left, windows scrolling on the right -->
+  <section class="hero">
+    <div class="hl">
+      <p class="live"><i></i>6 marketers on the roster</p>
+      <h1 class="mark" id="mark" aria-label="MARKETERS"></h1>
+      <p class="claim">Every coin needs a marketer.</p>
+      <p class="sub">Your coin hires an AI marketer. It makes TikToks starring your coin. It pitches, you post.</p>
+      <div class="ctas"><a class="btn" href="#room">hire a marketer</a><a class="btn line" href="#roster">the roster</a></div>
+    </div>
+    <div class="cols" id="cols" aria-hidden="true"></div>
+  </section>
 
-<main class="feed" id="feed">
-  <!-- 1 · for you -->
-  <section class="slide" id="s-intro">
-    <div class="phone">
-      <div class="mosaic" id="mosaic"></div>
-      <div class="shade deep"></div>
-      <div class="center">
-        <p class="live"><i></i>6 marketers on the roster</p>
-        <h1 class="mark" id="mark" aria-label="MARKETERS"></h1>
-        <p class="claim">Every coin needs a marketer.</p>
-        <div class="cta2"><button class="btn" type="button" data-go="s-pitch">hire one</button><button class="btn line" type="button" data-go="s-hype">roster</button></div>
+  <div class="tape" aria-hidden="true"><div class="tp"><span>it pitches</span><span>you post</span><span>it pitches</span><span>you post</span><span>it pitches</span><span>you post</span><span>it pitches</span><span>you post</span><span>it pitches</span><span>you post</span><span>it pitches</span><span>you post</span></div></div>
+
+  <!-- the roster -->
+  <section class="sec" id="roster">
+    <div class="wrap"><h2 class="big"><span>01</span>the roster</h2></div>
+    <div class="cards" id="cards"></div>
+  </section>
+
+  <!-- the pitch room -->
+  <section class="sec" id="room">
+    <div class="wrap">
+      <h2 class="big"><span>02</span>pitch room</h2>
+      <div class="room">
+        <ol class="how" id="how"><li id="h1"><b>1</b>drop your coin’s picture</li><li id="h2"><b>2</b>name it, pitch it, pick a marketer</li><li id="h3"><b>3</b>hit record: a free test promo</li><li id="h4"><b>4</b>launch it on pump.fun</li></ol>
+        <div class="phone cam">
+          <div class="media" id="camMedia">
+            <label class="viewfinder" id="drop"><input type="file" id="pic" accept="image/png,image/jpeg,image/webp,image/gif" hidden><span class="corner a"></span><span class="corner b"></span><span class="corner c"></span><span class="corner d"></span><b>+</b><em id="picNote">add your coin’s picture</em></label>
+          </div>
+          <div class="shade lo"></div>
+          <div class="camtop"><span class="rec" id="recDot"></span><span id="camTitle">pitch room</span></div>
+          <div class="hearts" id="camHearts"></div>
+          <div class="controls">
+            <div class="row2"><input id="nm" maxlength="32" autocomplete="off" spellcheck="false" placeholder="name"><input id="tk" maxlength="10" autocomplete="off" spellcheck="false" autocapitalize="characters" placeholder="$TICKER"></div>
+            <input id="line" maxlength="300" autocomplete="off" placeholder="the pitch: a frog who only buys the top">
+            <div class="tray" id="tray"></div>
+            <div class="shoot"><button class="ghost" type="button" id="copyCap" disabled>caption</button><button class="recbtn" type="button" id="pitchBtn" aria-label="Make a promo"><i></i></button><a class="ghost" id="dlBtn" href="#" download="promo.jpg" aria-disabled="true">save</a></div>
+            <p class="status" id="pitchStatus" role="status"></p>
+          </div>
+        </div>
+        <div class="launch">
+          <h3>launch <span id="dSym">your coin</span></h3>
+          <label class="fld"><span>X <em>optional</em></span><input id="xh" maxlength="16" autocomplete="off" spellcheck="false" placeholder="@"></label>
+          <dl class="split" id="split"></dl>
+          <div class="chips" id="buyBox"></div>
+          <div class="acts"><button class="btn" id="goBtn" type="button">Connect wallet to launch</button></div>
+          <div class="lsteps" id="goProg" hidden></div>
+          <p class="status" id="goStatus" role="status"></p>
+          <div id="goRes" hidden></div>
+        </div>
       </div>
-      <div class="rail"><button class="like" type="button" aria-label="Like"><i></i></button><button class="cmt" type="button" data-go="s-faq" aria-label="Questions"><i></i></button><button class="shr" type="button" aria-label="Share"><i></i></button><span class="disc"><img src="/assets/img/fav-64.png" alt=""></span></div>
-      <div class="cap"><b>@marketers</b><p>Your coin hires an AI marketer. It makes TikToks starring your coin.</p><div class="snd"><span>♫ it pitches, you post · it pitches, you post · it pitches, you post · </span></div></div>
-      <div class="swipe" aria-hidden="true">swipe<i></i></div>
-      <div class="hearts"></div>
-    </div>
-    <div class="info intro">
-      <h2>It pitches.<br><span class="gl" data-t="You post.">You post.</span></h2>
-      <ol class="how on"><li><b>1</b>drop your coin’s picture</li><li><b>2</b>hire a marketer</li><li><b>3</b>it makes the TikToks</li></ol>
-      <div class="faces" id="faces"></div>
     </div>
   </section>
-  <!-- 2 · the roster: one screen per marketer (filled by home.js) -->
-  <div id="roster"></div>
-  <!-- 3 · the pitch room -->
-  <section class="slide" id="s-pitch">
-    <div class="phone cam">
-      <div class="media" id="camMedia">
-        <label class="viewfinder" id="drop"><input type="file" id="pic" accept="image/png,image/jpeg,image/webp,image/gif" hidden><span class="corner a"></span><span class="corner b"></span><span class="corner c"></span><span class="corner d"></span><b>+</b><em id="picNote">add your coin’s picture</em></label>
-      </div>
-      <div class="shade lo"></div>
-      <div class="camtop"><span class="rec" id="recDot"></span><span id="camTitle">pitch room</span></div>
-      <div class="hearts" id="camHearts"></div>
-      <div class="controls">
-        <div class="row2"><input id="nm" maxlength="32" autocomplete="off" spellcheck="false" placeholder="name"><input id="tk" maxlength="10" autocomplete="off" spellcheck="false" autocapitalize="characters" placeholder="$TICKER"></div>
-        <input id="line" class="capin" maxlength="300" autocomplete="off" placeholder="the pitch: a frog who only buys the top">
-        <div class="tray" id="tray"></div>
-        <div class="shoot"><button class="ghost" type="button" id="launchOpen">launch</button><button class="recbtn" type="button" id="pitchBtn" aria-label="Make a promo"><i></i></button><button class="ghost" type="button" id="copyCap" disabled>caption</button></div>
-        <p class="status" id="pitchStatus" role="status"></p>
-      </div>
-    </div>
-    <div class="info">
-      <h2>pitch room</h2>
-      <ol class="how"><li id="h1"><b>1</b>add your coin’s picture</li><li id="h2"><b>2</b>name it, pitch it, pick a marketer</li><li id="h3"><b>3</b>hit record for a free test promo</li><li id="h4"><b>4</b>launch it on pump.fun</li></ol>
-      <div class="dl" id="dl" hidden><a class="btn line sm" id="dlStill" download="promo.jpg" href="#">save photo</a><a class="btn sm" id="dlVid" download="promo.mp4" href="#" hidden>download video</a></div>
+
+  <!-- on air -->
+  <section class="sec" id="air">
+    <div class="wrap"><h2 class="big"><span>03</span>on air</h2></div>
+    <div class="strip" id="feed"></div>
+  </section>
+
+  <!-- clients -->
+  <section class="sec" id="clients">
+    <div class="wrap">
+      <h2 class="big"><span>04</span>clients <span class="tabs" id="sorts"><button type="button" data-s="new" class="on">new</button><button type="button" data-s="heavy">top</button></span></h2>
+      <div class="clients" id="clientList"></div>
     </div>
   </section>
-  <!-- 4 · on air -->
-  <section class="slide" id="s-air">
-    <div class="phone list">
-      <div class="phead"><b>on air</b><span>promos from launched coins</span></div>
-      <div class="grid" id="air"></div>
-    </div>
-  </section>
-  <!-- 5 · clients -->
-  <section class="slide" id="s-clients">
-    <div class="phone list">
-      <div class="phead"><b>clients</b><span class="tabs" id="sorts"><button type="button" data-s="new" class="on">new</button><button type="button" data-s="heavy">top</button></span></div>
-      <div class="clients" id="clients"></div>
-    </div>
-  </section>
-  <!-- 6 · faq, as comments -->
-  <section class="slide" id="s-faq">
-    <div class="phone list">
-      <div class="phead"><b>questions</b><span>6 comments</span></div>
+
+  <!-- faq, as comments -->
+  <section class="sec" id="faq">
+    <div class="wrap">
+      <h2 class="big"><span>05</span>questions</h2>
       <ul class="comments">
         <li><img src="/assets/img/m4.jpg" alt=""><div><b>what is it?</b><p>A pump.fun launchpad where every coin hires an AI marketer that makes TikToks starring the coin’s own picture, a new one every six hours while it trades.</p></div></li>
         <li><img src="/assets/img/m3.jpg" alt=""><div><b>how are promos made?</b><p>FLUX makes the scene from your coin’s picture, then it becomes a short vertical video (Higgsfield when its key is set, otherwise Seedance or Wan through Vercel’s AI Gateway).</p></div></li>
@@ -108,28 +107,11 @@
     </div>
   </section>
 </main>
-<nav class="dots" id="dots" aria-hidden="true"></nav>
-
-<!-- the launch drawer -->
-<div class="drawer" id="drawer" hidden>
-  <div class="dk" id="drawerBg"></div>
-  <div class="dpanel" role="dialog" aria-modal="true" aria-labelledby="dTitle">
-    <span class="grab"></span>
-    <h3 id="dTitle">launch <span id="dSym">your coin</span></h3>
-    <label class="fld"><span>X <em>optional</em></span><input id="xh" maxlength="16" autocomplete="off" spellcheck="false" placeholder="@"></label>
-    <dl class="split" id="split"></dl>
-    <div class="chips" id="buyBox"></div>
-    <div class="acts"><button class="btn" id="goBtn" type="button">Connect wallet to launch</button></div>
-    <div class="lsteps" id="goProg" hidden></div>
-    <p class="status" id="goStatus" role="status"></p>
-    <div id="goRes" hidden></div>
-  </div>
-</div>
 <div class="sheet-w" id="sheet" hidden><div class="boxw" role="dialog" aria-modal="true" aria-labelledby="sheetTitle"><div class="bar2"><span id="sheetTitle"></span><button class="x" id="sheetX" type="button" aria-label="Close">×</button></div><div class="inner" id="sheetBody"></div></div></div>
 <div class="toast" id="toast" role="status"></div>
 <script src="/assets/js/core.js?v=2"></script>
 <script src="/assets/js/live.js?v=2"></script>
 <script src="/assets/js/cross.js?v=2"></script>
-<script src="/assets/js/home.js?v=4"></script>
+<script src="/assets/js/home.js?v=5"></script>
 </body>
 </html>
