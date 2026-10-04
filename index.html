@@ -8,12 +8,12 @@
 <meta name="theme-color" content="#0a0a0c">
 <meta property="og:title" content="MARKETERS">
 <meta property="og:description" content="Every coin needs a marketer.">
-<meta property="og:image" content="https://marketers.vercel.app/assets/img/og.jpg">
+<meta property="og:image" content="https://marketers-dusky.vercel.app/assets/img/og.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" sizes="64x64" href="/assets/img/fav-64.png">
 <link rel="apple-touch-icon" href="/assets/img/fav-180.png">
 <link rel="preload" href="/assets/fonts/BC-Black.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/css/mk.css?v=1">
+<link rel="stylesheet" href="/assets/css/mk.css?v=2">
 </head>
 <body>
 <div class="ghost" aria-hidden="true"></div>
@@ -25,19 +25,19 @@
 <span id="live-sr" class="sr" aria-live="polite"></span>
 <main>
   <section class="hero">
-    <p class="kick">an ad agency for memecoins, run by AI</p>
-    <h1 class="mark"><span class="gl" data-t="MARKETERS">MARKETERS</span></h1>
+    <h1 class="mark" id="mark" aria-label="MARKETERS"><span class="gl" data-t="M" style="--i:0">M</span><span class="gl" data-t="A" style="--i:1">A</span><span class="gl" data-t="R" style="--i:2">R</span><span class="gl" data-t="K" style="--i:3">K</span><span class="gl" data-t="E" style="--i:4">E</span><span class="gl" data-t="T" style="--i:5">T</span><span class="gl" data-t="E" style="--i:6">E</span><span class="gl" data-t="R" style="--i:7">R</span><span class="gl" data-t="S" style="--i:8">S</span></h1>
     <p class="claim">Every coin needs a marketer.</p>
-    <p class="sub">Hire an AI marketer for your coin. It makes TikToks starring your coin’s own picture: street hype, keynotes, infomercials, photoshoots. It pitches, you post.</p>
+    <p class="sub">Your coin hires an AI marketer. It makes TikToks starring your coin. It pitches, you post.</p>
     <div class="ctas"><a class="btn" href="#room">hire a marketer</a><a class="btn line" href="#roster">see the roster</a></div>
     <div class="flow" id="flow" aria-label="The roster"></div>
   </section>
 
   <div class="tape" aria-hidden="true"><div class="tp"><span>street hype</span><span>keynotes</span><span>infomercials</span><span>whiteboard plans</span><span>photoshoots</span><span>hotlines</span><span>street hype</span><span>keynotes</span><span>infomercials</span><span>whiteboard plans</span><span>photoshoots</span><span>hotlines</span></div></div>
+  <div class="tape b" aria-hidden="true"><div class="tp"><span>it pitches</span><span>you post</span><span>it pitches</span><span>you post</span><span>it pitches</span><span>you post</span><span>it pitches</span><span>you post</span><span>it pitches</span><span>you post</span><span>it pitches</span><span>you post</span></div></div>
 
   <section class="sec" id="roster">
     <div class="wrap">
-      <h2 class="big"><span>the</span> roster</h2>
+      <h2 class="big"><span>01</span> roster</h2>
       <ol class="rows" id="rows"></ol>
     </div>
     <div class="peek" id="peek" aria-hidden="true"><img alt=""></div>
@@ -45,7 +45,7 @@
 
   <section class="sec" id="room">
     <div class="wrap">
-      <h2 class="big"><span>the</span> pitch room</h2>
+      <h2 class="big"><span>02</span> pitch room</h2>
       <div class="rail3" id="rail3"><span class="on" data-s="1">brief</span><i></i><span data-s="2">promo</span><i></i><span data-s="3">launch</span></div>
       <div class="room">
         <div class="desk">
@@ -57,14 +57,14 @@
                 <label class="fld"><span>ticker</span><input id="tk" maxlength="10" autocomplete="off" spellcheck="false" autocapitalize="characters"></label>
               </div>
             </div>
-            <label class="fld"><span>the pitch, in one line</span><input id="line" maxlength="300" autocomplete="off" placeholder="a frog who only buys the top"></label>
-            <div class="fld"><span>your marketer</span><div class="cast" id="cast"></div></div>
+            <label class="fld"><span>pitch</span><input id="line" maxlength="300" autocomplete="off" placeholder="a frog who only buys the top"></label>
+            <div class="fld"><span>marketer</span><div class="cast" id="cast"></div></div>
             <div class="acts"><button class="btn" id="pitchBtn" type="button">make a test promo</button></div>
             <p class="status" id="pitchStatus" role="status"></p>
           </div>
           <div class="card">
             <h3>launch it</h3>
-            <label class="fld"><span>the coin’s X <em>optional</em></span><input id="xh" maxlength="16" autocomplete="off" spellcheck="false" placeholder="@"></label>
+            <label class="fld"><span>X <em>optional</em></span><input id="xh" maxlength="16" autocomplete="off" spellcheck="false" placeholder="@"></label>
             <dl class="split" id="split"></dl>
             <div class="chips buy" id="buyBox"></div>
             <div class="acts"><button class="btn" id="goBtn" type="button">Connect wallet to launch</button></div>
@@ -75,7 +75,7 @@
         </div>
         <div class="ad">
           <div class="ph big" id="pv">
-            <div class="scr" id="pvScr"><div class="empty"><span class="gl" data-t="M">M</span><p>your coin’s promo shows up here</p></div></div>
+            <div class="scr" id="pvScr"><div class="empty"><span class="gl" data-t="M">M</span><p>your promo lands here</p></div></div>
             <div class="ui"><div class="rail"><i class="hrt"></i><i class="cmt"></i><i class="shr"></i></div><div class="cap"><b id="pvWho">@your.marketer</b><span id="pvCap"></span></div></div>
             <div class="likes" id="likes"></div>
           </div>
@@ -90,14 +90,14 @@
 
   <section class="sec" id="onair">
     <div class="wrap">
-      <h2 class="big"><span>on</span> air</h2>
+      <h2 class="big"><span>03</span> on air</h2>
     </div>
     <div class="strip" id="feed"></div>
   </section>
 
   <section class="sec" id="clients">
     <div class="wrap">
-      <h2 class="big"><span>the</span> clients <span class="tabs" id="sorts"><button type="button" data-s="new" class="on">newest</button><button type="button" data-s="heavy">biggest</button></span></h2>
+      <h2 class="big"><span>04</span> clients <span class="tabs" id="sorts"><button type="button" data-s="new" class="on">newest</button><button type="button" data-s="heavy">biggest</button></span></h2>
       <div class="coins" id="nursery"></div>
       <button class="btn line more" id="moreBtn" type="button" hidden>more</button>
     </div>
@@ -105,16 +105,14 @@
 
   <section class="sec" id="faq">
     <div class="wrap">
-      <h2 class="big"><span>the</span> fine print</h2>
+      <h2 class="big"><span>05</span> faq</h2>
       <div class="faq">
-        <details><summary>what is MARKETERS?</summary><p>A launchpad where every coin hires an AI marketer. You launch on pump.fun; your marketer makes TikToks starring the coin’s own picture, a new one every six hours while the coin trades.</p></details>
-        <details><summary>how is a promo made?</summary><p>The marketer’s scene is made with FLUX, using your coin’s picture as the reference so the mascot stays itself. Then the photo is turned into a short vertical video (Higgsfield when its key is set, otherwise Seedance or Wan through Vercel’s AI Gateway). Captions come from a small OpenAI model.</p></details>
-        <details><summary>does it post on TikTok for me?</summary><p>No. TikTok doesn’t let apps open accounts or post for you here, so you make the coin’s TikTok yourself. Every promo has a download button and a ready caption. Turn on TikTok’s AI-generated label when you post.</p></details>
-        <details><summary>who gets the fees?</summary><p>pump.fun’s own fee sharing splits every creator fee, locked in the same signatures that launch the coin: 70% to you, 30% to the house, which pays for every promo. Before you sign, the page reads the transactions and refuses to go on if the split isn’t the one shown.</p></details>
-        <details><summary>how often does it work?</summary><p>One promo right after launch, then one every six hours while the coin trades. A day without a trade and it slows down; seven days and it stops. The house has daily photo and video budgets; if they run out, work resumes at 00:00 UTC.</p></details>
-        <details><summary>what won’t it make?</summary><p>No real people, no known characters, nothing sexual, no financial advice, no price predictions, never “buy” or “sell”. Anything that slips through is cut before it’s shown.</p></details>
-        <details><summary>is this TikTok?</summary><p>No. MARKETERS is independent and not affiliated with TikTok, ByteDance or any of the video tools it uses.</p></details>
-        <details><summary>does MARKETERS hold my keys?</summary><p>No. You sign everything in your own wallet and the server has no key. The house is a public address; its share arrives through pump.fun’s split.</p></details>
+        <details><summary>what is it?</summary><p>A pump.fun launchpad where every coin hires an AI marketer that makes TikToks starring the coin’s own picture, a new one every six hours while it trades.</p></details>
+        <details><summary>how are promos made?</summary><p>FLUX makes the scene from your coin’s picture. Then it’s turned into a short vertical video (Higgsfield when its key is set, otherwise Seedance or Wan through Vercel’s AI Gateway).</p></details>
+        <details><summary>does it post for me?</summary><p>No. You make the coin’s TikTok and post the promos: each has a download button and a caption. Turn on TikTok’s AI-generated label.</p></details>
+        <details><summary>who gets the fees?</summary><p>70% you, 30% the house, which pays the marketers. Locked with pump.fun’s fee sharing at launch, checked by the page before you sign.</p></details>
+        <details><summary>what won’t it make?</summary><p>No real people, no known characters, nothing sexual, no price talk, never “buy” or “sell”.</p></details>
+        <details><summary>is this TikTok?</summary><p>No. Independent, not affiliated with TikTok, ByteDance or the video tools it uses. No keys held: you sign in your own wallet.</p></details>
       </div>
     </div>
   </section>
@@ -124,6 +122,6 @@
 <script src="/assets/js/core.js?v=1"></script>
 <script src="/assets/js/live.js?v=1"></script>
 <script src="/assets/js/cross.js?v=1"></script>
-<script src="/assets/js/home.js?v=1"></script>
+<script src="/assets/js/home.js?v=2"></script>
 </body>
 </html>
