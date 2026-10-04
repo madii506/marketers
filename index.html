@@ -4,8 +4,8 @@
 <title>MARKETERS</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Every coin needs a marketer. Hire an AI marketer for your coin: it makes TikToks starring your coin's own picture. It pitches, you post.">
-<meta name="theme-color" content="#0a0a0c">
+<meta name="description" content="Every coin needs a marketer. Your coin hires an AI marketer that makes TikToks starring your coin. It pitches, you post.">
+<meta name="theme-color" content="#000000">
 <meta property="og:title" content="MARKETERS">
 <meta property="og:description" content="Every coin needs a marketer.">
 <meta property="og:image" content="https://marketers-dusky.vercel.app/assets/img/og.jpg">
@@ -13,115 +13,117 @@
 <link rel="icon" type="image/png" sizes="64x64" href="/assets/img/fav-64.png">
 <link rel="apple-touch-icon" href="/assets/img/fav-180.png">
 <link rel="preload" href="/assets/fonts/BC-Black.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/css/mk.css?v=2">
+<link rel="stylesheet" href="/assets/css/feed.css?v=1">
 </head>
 <body>
-<div class="ghost" aria-hidden="true"></div>
-<header class="bar">
-  <a class="logo" href="/" aria-label="MARKETERS"><img src="/assets/img/fav-64.png" alt=""><span class="gl" data-t="MARKETERS">MARKETERS</span></a>
-  <nav class="nav" aria-label="Sections"><a href="#roster">roster</a><a href="#room">pitch room</a><a href="#onair">on air</a><a href="#clients">clients</a><a href="#faq">faq</a></nav>
+<aside class="side" aria-label="Menu">
+  <a class="logo" href="#s-intro"><img src="/assets/img/fav-64.png" alt=""><span class="gl" data-t="MARKETERS">MARKETERS</span></a>
+  <nav class="menu" id="menu">
+    <a href="#s-intro" data-s="s-intro"><i class="ic home"></i>for you</a>
+    <a href="#s-hype" data-s="s-hype"><i class="ic team"></i>roster</a>
+    <a href="#s-pitch" data-s="s-pitch"><i class="ic cam"></i>pitch room</a>
+    <a href="#s-air" data-s="s-air"><i class="ic live"></i>on air</a>
+    <a href="#s-clients" data-s="s-clients"><i class="ic list"></i>clients</a>
+    <a href="#s-faq" data-s="s-faq"><i class="ic chat"></i>faq</a>
+  </nav>
   <button class="wallet" id="walletBtn" type="button"><i></i><span>connect</span></button>
-</header>
+</aside>
+<header class="top"><a class="logo" href="#s-intro"><img src="/assets/img/fav-64.png" alt=""><span class="gl" data-t="MARKETERS">MARKETERS</span></a></header>
 <span id="live-sr" class="sr" aria-live="polite"></span>
-<main>
-  <section class="hero">
-    <h1 class="mark" id="mark" aria-label="MARKETERS"><span class="gl" data-t="M" style="--i:0">M</span><span class="gl" data-t="A" style="--i:1">A</span><span class="gl" data-t="R" style="--i:2">R</span><span class="gl" data-t="K" style="--i:3">K</span><span class="gl" data-t="E" style="--i:4">E</span><span class="gl" data-t="T" style="--i:5">T</span><span class="gl" data-t="E" style="--i:6">E</span><span class="gl" data-t="R" style="--i:7">R</span><span class="gl" data-t="S" style="--i:8">S</span></h1>
-    <p class="claim">Every coin needs a marketer.</p>
-    <p class="sub">Your coin hires an AI marketer. It makes TikToks starring your coin. It pitches, you post.</p>
-    <div class="ctas"><a class="btn" href="#room">hire a marketer</a><a class="btn line" href="#roster">see the roster</a></div>
-    <div class="flow" id="flow" aria-label="The roster"></div>
-  </section>
 
-  <div class="tape" aria-hidden="true"><div class="tp"><span>street hype</span><span>keynotes</span><span>infomercials</span><span>whiteboard plans</span><span>photoshoots</span><span>hotlines</span><span>street hype</span><span>keynotes</span><span>infomercials</span><span>whiteboard plans</span><span>photoshoots</span><span>hotlines</span></div></div>
-  <div class="tape b" aria-hidden="true"><div class="tp"><span>it pitches</span><span>you post</span><span>it pitches</span><span>you post</span><span>it pitches</span><span>you post</span><span>it pitches</span><span>you post</span><span>it pitches</span><span>you post</span><span>it pitches</span><span>you post</span></div></div>
-
-  <section class="sec" id="roster">
-    <div class="wrap">
-      <h2 class="big"><span>01</span> roster</h2>
-      <ol class="rows" id="rows"></ol>
+<main class="feed" id="feed">
+  <!-- 1 · for you -->
+  <section class="slide" id="s-intro">
+    <div class="phone">
+      <div class="media" id="introMedia"></div>
+      <div class="shade"></div>
+      <div class="center">
+        <h1 class="mark" id="mark" aria-label="MARKETERS"></h1>
+        <p class="claim">Every coin needs a marketer.</p>
+        <button class="btn" type="button" data-go="s-pitch">hire one</button>
+      </div>
+      <div class="rail"><button class="like" type="button" aria-label="Like"><i></i></button><button class="cmt" type="button" data-go="s-faq" aria-label="Questions"><i></i></button><button class="shr" type="button" aria-label="Share"><i></i></button><span class="disc"><img src="/assets/img/fav-64.png" alt=""></span></div>
+      <div class="cap"><b>@marketers</b><p>Your coin hires an AI marketer. It makes TikToks starring your coin.</p><div class="snd"><span>♫ it pitches, you post · it pitches, you post · it pitches, you post · </span></div></div>
+      <div class="swipe" aria-hidden="true">swipe<i></i></div>
+      <div class="hearts"></div>
     </div>
-    <div class="peek" id="peek" aria-hidden="true"><img alt=""></div>
   </section>
-
-  <section class="sec" id="room">
-    <div class="wrap">
-      <h2 class="big"><span>02</span> pitch room</h2>
-      <div class="rail3" id="rail3"><span class="on" data-s="1">brief</span><i></i><span data-s="2">promo</span><i></i><span data-s="3">launch</span></div>
-      <div class="room">
-        <div class="desk">
-          <div class="card">
-            <div class="top2">
-              <label class="drop" id="drop"><input type="file" id="pic" accept="image/png,image/jpeg,image/webp,image/gif" hidden><img id="picImg" alt=""><b>+</b><span id="picNote">coin picture</span></label>
-              <div class="nt">
-                <label class="fld"><span>name</span><input id="nm" maxlength="32" autocomplete="off" spellcheck="false"></label>
-                <label class="fld"><span>ticker</span><input id="tk" maxlength="10" autocomplete="off" spellcheck="false" autocapitalize="characters"></label>
-              </div>
-            </div>
-            <label class="fld"><span>pitch</span><input id="line" maxlength="300" autocomplete="off" placeholder="a frog who only buys the top"></label>
-            <div class="fld"><span>marketer</span><div class="cast" id="cast"></div></div>
-            <div class="acts"><button class="btn" id="pitchBtn" type="button">make a test promo</button></div>
-            <p class="status" id="pitchStatus" role="status"></p>
-          </div>
-          <div class="card">
-            <h3>launch it</h3>
-            <label class="fld"><span>X <em>optional</em></span><input id="xh" maxlength="16" autocomplete="off" spellcheck="false" placeholder="@"></label>
-            <dl class="split" id="split"></dl>
-            <div class="chips buy" id="buyBox"></div>
-            <div class="acts"><button class="btn" id="goBtn" type="button">Connect wallet to launch</button></div>
-            <div class="lsteps" id="goProg" hidden></div>
-            <p class="status" id="goStatus" role="status"></p>
-            <div id="goRes" hidden></div>
-          </div>
-        </div>
-        <div class="ad">
-          <div class="ph big" id="pv">
-            <div class="scr" id="pvScr"><div class="empty"><span class="gl" data-t="M">M</span><p>your promo lands here</p></div></div>
-            <div class="ui"><div class="rail"><i class="hrt"></i><i class="cmt"></i><i class="shr"></i></div><div class="cap"><b id="pvWho">@your.marketer</b><span id="pvCap"></span></div></div>
-            <div class="likes" id="likes"></div>
-          </div>
-          <div class="kit" id="kit" hidden>
-            <p id="kCap"></p>
-            <div class="kacts"><button type="button" class="btn line sm" id="copyCap">copy caption</button><a class="btn line sm" id="dlStill" download="promo.jpg" href="#">save photo</a><a class="btn sm" id="dlVid" download="promo.mp4" href="#" hidden>download video</a></div>
-          </div>
-        </div>
+  <!-- 2 · the roster: one screen per marketer (filled by home.js) -->
+  <div id="roster"></div>
+  <!-- 3 · the pitch room -->
+  <section class="slide" id="s-pitch">
+    <div class="phone cam">
+      <div class="media" id="camMedia">
+        <label class="viewfinder" id="drop"><input type="file" id="pic" accept="image/png,image/jpeg,image/webp,image/gif" hidden><span class="corner a"></span><span class="corner b"></span><span class="corner c"></span><span class="corner d"></span><b>+</b><em id="picNote">add your coin’s picture</em></label>
+      </div>
+      <div class="shade lo"></div>
+      <div class="camtop"><span class="rec" id="recDot"></span><span id="camTitle">pitch room</span></div>
+      <div class="hearts" id="camHearts"></div>
+      <div class="controls">
+        <div class="row2"><input id="nm" maxlength="32" autocomplete="off" spellcheck="false" placeholder="name"><input id="tk" maxlength="10" autocomplete="off" spellcheck="false" autocapitalize="characters" placeholder="$TICKER"></div>
+        <input id="line" class="capin" maxlength="300" autocomplete="off" placeholder="the pitch: a frog who only buys the top">
+        <div class="tray" id="tray"></div>
+        <div class="shoot"><button class="ghost" type="button" id="launchOpen">launch</button><button class="recbtn" type="button" id="pitchBtn" aria-label="Make a promo"><i></i></button><button class="ghost" type="button" id="copyCap" disabled>caption</button></div>
+        <p class="status" id="pitchStatus" role="status"></p>
       </div>
     </div>
-  </section>
-
-  <section class="sec" id="onair">
-    <div class="wrap">
-      <h2 class="big"><span>03</span> on air</h2>
-    </div>
-    <div class="strip" id="feed"></div>
-  </section>
-
-  <section class="sec" id="clients">
-    <div class="wrap">
-      <h2 class="big"><span>04</span> clients <span class="tabs" id="sorts"><button type="button" data-s="new" class="on">newest</button><button type="button" data-s="heavy">biggest</button></span></h2>
-      <div class="coins" id="nursery"></div>
-      <button class="btn line more" id="moreBtn" type="button" hidden>more</button>
+    <div class="info">
+      <h2>pitch room</h2>
+      <ol class="how"><li id="h1"><b>1</b>add your coin’s picture</li><li id="h2"><b>2</b>name it, pitch it, pick a marketer</li><li id="h3"><b>3</b>hit record for a free test promo</li><li id="h4"><b>4</b>launch it on pump.fun</li></ol>
+      <div class="dl" id="dl" hidden><a class="btn line sm" id="dlStill" download="promo.jpg" href="#">save photo</a><a class="btn sm" id="dlVid" download="promo.mp4" href="#" hidden>download video</a></div>
     </div>
   </section>
-
-  <section class="sec" id="faq">
-    <div class="wrap">
-      <h2 class="big"><span>05</span> faq</h2>
-      <div class="faq">
-        <details><summary>what is it?</summary><p>A pump.fun launchpad where every coin hires an AI marketer that makes TikToks starring the coin’s own picture, a new one every six hours while it trades.</p></details>
-        <details><summary>how are promos made?</summary><p>FLUX makes the scene from your coin’s picture. Then it’s turned into a short vertical video (Higgsfield when its key is set, otherwise Seedance or Wan through Vercel’s AI Gateway).</p></details>
-        <details><summary>does it post for me?</summary><p>No. You make the coin’s TikTok and post the promos: each has a download button and a caption. Turn on TikTok’s AI-generated label.</p></details>
-        <details><summary>who gets the fees?</summary><p>70% you, 30% the house, which pays the marketers. Locked with pump.fun’s fee sharing at launch, checked by the page before you sign.</p></details>
-        <details><summary>what won’t it make?</summary><p>No real people, no known characters, nothing sexual, no price talk, never “buy” or “sell”.</p></details>
-        <details><summary>is this TikTok?</summary><p>No. Independent, not affiliated with TikTok, ByteDance or the video tools it uses. No keys held: you sign in your own wallet.</p></details>
-      </div>
+  <!-- 4 · on air -->
+  <section class="slide" id="s-air">
+    <div class="phone list">
+      <div class="phead"><b>on air</b><span>promos from launched coins</span></div>
+      <div class="grid" id="air"></div>
+    </div>
+  </section>
+  <!-- 5 · clients -->
+  <section class="slide" id="s-clients">
+    <div class="phone list">
+      <div class="phead"><b>clients</b><span class="tabs" id="sorts"><button type="button" data-s="new" class="on">new</button><button type="button" data-s="heavy">top</button></span></div>
+      <div class="clients" id="clients"></div>
+    </div>
+  </section>
+  <!-- 6 · faq, as comments -->
+  <section class="slide" id="s-faq">
+    <div class="phone list">
+      <div class="phead"><b>questions</b><span>6 comments</span></div>
+      <ul class="comments">
+        <li><img src="/assets/img/m4.jpg" alt=""><div><b>what is it?</b><p>A pump.fun launchpad where every coin hires an AI marketer that makes TikToks starring the coin’s own picture, a new one every six hours while it trades.</p></div></li>
+        <li><img src="/assets/img/m3.jpg" alt=""><div><b>how are promos made?</b><p>FLUX makes the scene from your coin’s picture, then it becomes a short vertical video (Higgsfield when its key is set, otherwise Seedance or Wan through Vercel’s AI Gateway).</p></div></li>
+        <li><img src="/assets/img/m6.jpg" alt=""><div><b>does it post for me?</b><p>No. You make the coin’s TikTok and post the promos. Each has a download and a caption. Turn on TikTok’s AI-generated label.</p></div></li>
+        <li><img src="/assets/img/m1.jpg" alt=""><div><b>who gets the fees?</b><p>70% you, 30% the house, which pays the marketers. Locked with pump.fun’s fee sharing at launch and checked by the page before you sign.</p></div></li>
+        <li><img src="/assets/img/m5.jpg" alt=""><div><b>what won’t it make?</b><p>No real people, no known characters, nothing sexual, no price talk, never “buy” or “sell”.</p></div></li>
+        <li><img src="/assets/img/m2.jpg" alt=""><div><b>is this TikTok?</b><p>No. Independent, not affiliated with TikTok, ByteDance or the video tools it uses. No keys held: you sign in your own wallet.</p></div></li>
+      </ul>
     </div>
   </section>
 </main>
+<nav class="dots" id="dots" aria-hidden="true"></nav>
+
+<!-- the launch drawer -->
+<div class="drawer" id="drawer" hidden>
+  <div class="dk" id="drawerBg"></div>
+  <div class="dpanel" role="dialog" aria-modal="true" aria-labelledby="dTitle">
+    <span class="grab"></span>
+    <h3 id="dTitle">launch <span id="dSym">your coin</span></h3>
+    <label class="fld"><span>X <em>optional</em></span><input id="xh" maxlength="16" autocomplete="off" spellcheck="false" placeholder="@"></label>
+    <dl class="split" id="split"></dl>
+    <div class="chips" id="buyBox"></div>
+    <div class="acts"><button class="btn" id="goBtn" type="button">Connect wallet to launch</button></div>
+    <div class="lsteps" id="goProg" hidden></div>
+    <p class="status" id="goStatus" role="status"></p>
+    <div id="goRes" hidden></div>
+  </div>
+</div>
 <div class="sheet-w" id="sheet" hidden><div class="boxw" role="dialog" aria-modal="true" aria-labelledby="sheetTitle"><div class="bar2"><span id="sheetTitle"></span><button class="x" id="sheetX" type="button" aria-label="Close">×</button></div><div class="inner" id="sheetBody"></div></div></div>
 <div class="toast" id="toast" role="status"></div>
-<script src="/assets/js/core.js?v=1"></script>
-<script src="/assets/js/live.js?v=1"></script>
-<script src="/assets/js/cross.js?v=1"></script>
-<script src="/assets/js/home.js?v=2"></script>
+<script src="/assets/js/core.js?v=2"></script>
+<script src="/assets/js/live.js?v=2"></script>
+<script src="/assets/js/cross.js?v=2"></script>
+<script src="/assets/js/home.js?v=3"></script>
 </body>
 </html>
