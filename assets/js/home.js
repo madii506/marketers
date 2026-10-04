@@ -29,7 +29,7 @@
   // ---------- the hero: the roster as a turning coverflow, likes rising off the front card ----------
   (function flow() {
     const box = $('#flow');
-    box.innerHTML = CAST.map((c, i) => `<div class="fc" data-i="${i}"><img src="${pic(c)}" alt="${esc(c.name)}, ${esc(c.role)}"${i > 2 ? ' loading="lazy"' : ''}><div class="tag"><b>${esc(c.name)}</b><span>${esc(c.role)}</span></div></div>`).join('') + '<div class="hearts" id="hh"></div>';
+    box.innerHTML = CAST.map((c, i) => `<div class="fc" data-i="${i}"><i class="bar5"></i><img src="${pic(c)}" alt="${esc(c.name)}, ${esc(c.role)}"${i > 2 ? ' loading="lazy"' : ''}><div class="tag"><b>${esc(c.name)}</b><span>${esc(c.role)}</span></div></div>`).join('') + '<div class="hearts" id="hh"></div>';
     const cards = $$('.fc', box); let at = 0, timer = null;
     function lay() {
       const w = innerWidth < 560 ? 150 : 230;
@@ -38,7 +38,7 @@
         const a = Math.abs(d);
         c.style.transform = `translateX(${d * w}px) translateZ(${-a * 160}px) rotateY(${-d * 18}deg)`;
         c.style.zIndex = 10 - a; c.style.opacity = a > 2 ? 0 : 1; c.style.filter = a ? `brightness(${1 - a * .25})` : 'none';
-        c.classList.toggle('c0', d === 0);
+        const was = c.classList.contains('c0'); c.classList.toggle('c0', d === 0); if (d === 0 && !was) { const b = c.querySelector('.bar5'); if (b) { b.style.display = 'none'; void b.offsetWidth; b.style.display = ''; } }
         const r = st.reel[CAST[i].k];
         if (d === 0 && r && !c.querySelector('video')) { const v = document.createElement('video'); v.src = r; v.muted = true; v.loop = true; v.playsInline = true; v.autoplay = true; v.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover'; c.prepend(v); v.play().catch(() => {}); }
       });
@@ -232,6 +232,23 @@
     $$('.big, .row, .card, .ad, .faq details, .rail3').forEach((el, i) => { el.classList.add('rv'); el.style.setProperty('--dl', (i % 6) * .06 + 's'); io.observe(el); });
     const links = $$('.nav a'); const nio = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) links.forEach(a => a.classList.toggle('on', a.hash === '#' + en.target.id)); }), { rootMargin: '-45% 0px -50% 0px' });
     ['roster', 'room', 'onair', 'clients', 'faq'].forEach(id => nio.observe(document.getElementById(id)));
+  })();
+
+
+  // ---------- motion: the wordmark glitches now and then, buttons lean toward the cursor, a cursor dot ----------
+  (function motion() {
+    if (calm) return;
+    const mark = $('#mark');
+    setInterval(() => { if (document.hidden) return; mark.classList.add('glitch'); setTimeout(() => mark.classList.remove('glitch'), 340); }, 3400);
+    if (matchMedia('(hover: none)').matches) return;
+    document.addEventListener('mousemove', e => {
+      $$('.btn').forEach(b => { const r = b.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2, dx = e.clientX - cx, dy = e.clientY - cy, dist = Math.hypot(dx, dy);
+        if (dist < 90) b.style.transform = `translate(${dx * .18}px, ${dy * .25}px)`; else if (b.style.transform) b.style.transform = ''; });
+    });
+    const dot = document.createElement('div'); dot.className = 'cur'; document.body.appendChild(dot);
+    let mx = innerWidth / 2, my = innerHeight / 2, x = mx, y = my;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; dot.classList.toggle('big', !!(e.target.closest && e.target.closest('a,button,.fc,.row,.ca,.drop'))); });
+    (function loop() { x += (mx - x) * .22; y += (my - y) * .22; dot.style.transform = `translate(${x - dot.offsetWidth / 2}px, ${y - dot.offsetHeight / 2}px)`; requestAnimationFrame(loop); })();
   })();
 
   pickCast(st.cast); splitShow(); refreshGo(); loadBoard();
